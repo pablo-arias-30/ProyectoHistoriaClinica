@@ -35,6 +35,7 @@ contract HistoriaClinica {
         Persona datos;
         string centro_sanitario;
         uint medico_asignado;
+        string datos_paciente;
     }
 
     struct Medico {
@@ -69,19 +70,20 @@ contract HistoriaClinica {
         tipo_consulta tipoConsulta;
     }
 
-function registrarPaciente(string [2] memory _datos_paciente) public {
-    string memory DNI = _datos_paciente[0]; //Almacenamos el DNI temporalmente para mayor comodidad
+function registrarPaciente(string memory _DNI, string memory _centroSanitario, string memory _datosPaciente) public {
+    require(pacientes[_DNI].datos.direccionPublica == address(0), "Este paciente ya esta registrado");
     Persona memory datosPersonales = Persona({
     direccionPublica: msg.sender,
-    DNI: _datos_paciente[0]
+    DNI: _DNI
 });
 
-pacientes[DNI] = Paciente({
-    centro_sanitario: _datos_paciente[1],
-    datos: datosPersonales, // Asignamos directamente los datosPersonales como parte del paciente
-    medico_asignado: 0
+pacientes[_DNI] = Paciente({
+    centro_sanitario: _centroSanitario,
+    datos: datosPersonales,
+    medico_asignado: type(uint256).max, //aún no tiene médico asignado
+    datos_paciente: _datosPaciente
 });
-asignarMedico(DNI);
+asignarMedico(_DNI);
 
 }
 
@@ -120,7 +122,7 @@ asignarMedico(DNI);
             if (
                 keccak256(bytes(medicos[i].especialidad)) ==
                 keccak256(bytes("General")) &&
-                keccak256(bytes(medicos[i].especialidad)) ==
+                keccak256(bytes(medicos[i].centro_sanitario)) ==
                 keccak256(bytes(nombreCentroSanitario)) &&
                 medicos[i].numero_pacientes < minimoPacientes
             ) {
@@ -130,13 +132,14 @@ asignarMedico(DNI);
             i++;
         }
         medicos[indiceMedicoConMenosPacientes].numero_pacientes++; //Aumentamos pacientes de ese médico
+        pacientes[_DNI].medico_asignado=indiceMedicoConMenosPacientes; //Asignamos médico al paciente
         return indiceMedicoConMenosPacientes;
     }
 
     
  //Paciente pide una cita
 function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string memory _datos_consulta, string memory _datos_cita, tipo_consulta _tipoConsulta) public {
-    require(pacientes[_DNI].medico_asignado > 0 , "El paciente no tiene un medico asignado");
+    require(pacientes[_DNI].medico_asignado < type(uint256).max, "El paciente no tiene un medico asignado");
     require(_hora >= 8 && _hora <= 18, "La clinica solo atiende entre las 8:00 y las 18:00.");
     require(_fecha >= block.timestamp, "No se pueden programar citas anteriores a este momento.");
 
@@ -153,16 +156,18 @@ function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string m
             }
     }
         if (huecoLibre) {
-        Cita memory cita = Cita({
+    //Asignamos la nueva cita
+        citas.push(
+        Cita({
             medico: medico,
             paciente: paciente,
             fecha: _fecha,
             hora: _hora,
             datos_cita:_datos_cita,
             tipoConsulta: _tipoConsulta
-        });
+        }));
 
-        citas[citas.length-1] = cita; //Asignamos la nueva cita
+    //Creamos la consulta
         consultas.push(
         Consulta({
         paciente:paciente,
@@ -175,7 +180,7 @@ function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string m
     }));
 
     } else {
-        revert("No hay hueco libre para la cita en el horario solicitado.");
+        revert("No hay hueco libre para la cita en el horario solicitado para el paciente sugerido.");
     }
 
 }
