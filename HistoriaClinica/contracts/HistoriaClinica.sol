@@ -5,8 +5,8 @@ contract HistoriaClinica {
     mapping(string => Paciente) public pacientes;
     Medico[] public medicos;
     Enfermero[] public enfermeros;
-     Cita[] private citas;
-    Consulta[] private consultas;
+     Cita[] public citas;
+    Consulta[] public consultas;
 
     address public owner;
 
