@@ -201,12 +201,25 @@ function atenderConsulta (string memory _DNI, uint _fecha, uint _hora, string me
 
 function modificarCita(uint8 indice, Medico memory _medico, string memory _datos_cita, Paciente memory _paciente, uint _nuevaFecha, uint8 _nuevaHora, tipo_consulta _nuevoTipoConsulta) public {
     require((indice < citas.length) && (msg.sender == _medico.datos.direccionPublica || msg.sender == _paciente.datos.direccionPublica), "la cita no existe o no hay permisos suficientes");
+    require(_nuevaHora >= 8 && _nuevaHora <= 18, "La clinica solo atiende entre las 8:00 y las 18:00.");
+    require(_nuevaFecha >= block.timestamp, "No se pueden programar citas anteriores a este momento.");
+    //Actualizamos datos de la futura consulta médica
+     for (uint i = 0; i < consultas.length; i++) {
+        if (consultas[i].fecha == citas[indice].fecha &&
+            consultas[i].hora == citas[indice].hora &&
+            keccak256(bytes(consultas[i].paciente.datos.DNI)) == keccak256(bytes(_paciente.datos.DNI))) {
+            consultas[i].fecha= _nuevaFecha;
+            consultas[i].hora= _nuevaHora;
+            consultas[i].fecha= _nuevaFecha;
+            consultas[i].tipo= _nuevoTipoConsulta;
+}
+     }
     citas[indice].fecha=_nuevaFecha;
     citas[indice].hora=_nuevaHora;
     citas[indice].datos_cita=_datos_cita;
     citas[indice].tipoConsulta = _nuevoTipoConsulta;
+    
 }
-
 //Medico crea consulta
 function crearConsulta(Consulta memory nuevaConsulta) public {
     consultas.push(nuevaConsulta);
