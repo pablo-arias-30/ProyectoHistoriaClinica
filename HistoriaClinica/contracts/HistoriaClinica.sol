@@ -220,7 +220,7 @@ function modificarCita(uint8 indice, Medico memory _medico, string memory _datos
     citas[indice].tipoConsulta = _nuevoTipoConsulta;
     
 }
-//Medico crea consulta
+//Medico crea consulta (especialidad o no)
 function crearConsulta(Consulta memory nuevaConsulta) public {
     consultas.push(nuevaConsulta);
 }
