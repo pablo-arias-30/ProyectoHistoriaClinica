@@ -11,5 +11,13 @@
   },
   "keywords": [],
   "author": "",
-  "license": "ISC"
+  "license": "ISC",
+  "devDependencies": {
+    "solc": "^0.8.22"
+  },
+  "dependencies": {
+    "python3": "^0.0.1",
+    "truffle": "^5.11.5",
+    "web3": "^4.2.2"
+  }
 }
