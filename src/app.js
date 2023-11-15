@@ -1,18 +1,3 @@
-
-/*async function realizarTransaccion() {
-    try {
-        const result = await miContrato.methods.await.registrarMedico("0x742d35Cc6634C0532925a3b844Bc454e4438f44e", "123456789", "General", "ramon y cajal").send({ from: web3MetaMask.eth.defaultAccount });
-        // Actualiza el resultado de la transacción en el HTML
-        document.getElementById('transactionResult').textContent = 'Transacción exitosa: ' + result.transactionHash;
-    } catch (error) {
-        console.error('Error en la transacción:', error);
-
-        // En caso de error, muestra el mensaje de error
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
-    }
-}*/
-
-
 // Función para obtener el hash de los nodos activos
 async function obtenerHashNodosActivos() {
   try {
@@ -34,14 +19,14 @@ async function obtenerHashNodosActivos() {
           const senderAddress = web3MetaMask.eth.defaultAccount;
           console.log(senderAddress);         
           // Ejecuta la transacción
-          const result = await miContrato.methods.registrarMedico('0x742d35Cc6634C0532925a3b844Bc454e4438f44e', '123456789', 'General', 'ramon y cajal').send({from:accounts[0]});
+          /*const result = await miContrato.methods.registrarMedico('0x742d35Cc6634C0532925a3b844Bc454e4438f44e', '123456789', 'General', 'ramon y cajal').send({from:accounts[0]});
           console.log(result);
 
 
 
           // Actualiza el resultado de la transacción en el HTML
           document.getElementById('transactionResult').textContent = 'Transacción exitosa: ' + result.transactionHash;
-
+*/
           // Cálculo del hash
           const hash = web3MetaMask.utils.soliditySha3({ t: 'string', v: nodeId }, { t: 'uint', v: peerCount });
 

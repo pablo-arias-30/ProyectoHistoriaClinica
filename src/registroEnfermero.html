@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia Clínica App</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 50px;
+        }
+
+        .menu-container {
+            background-color: #343a40;
+            padding: 10px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .menu-item {
+            display: inline-block;
+            margin-right: 10px;
+            color: #ffffff;
+            font-weight: bold;
+            font-size: 18px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="menu-container">
+        <div class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</div>
+        <div class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</div>
+        <div class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</div>
+    </div>
+
+    <div class="container mt-5">
+        <h1>Historia Clínica App</h1>
+        <form id="registrarMedicoForm">
+            <h2>Registrar Médico</h2>
+            <div class="form-group">
+                <label for="direccionMedico">Dirección Pública del Médico:</label>
+                <input type="text" class="form-control" id="direccionMedico" required>
+            </div>
+            <div class="form-group">
+                <label for="dniMedico">DNI del Médico:</label>
+                <input type="text" class="form-control" id="dniMedico" required>
+            </div>
+            <div class="form-group">
+                <label for="nombreMedico">Nombre del Médico:</label>
+                <input type="text" class="form-control" id="nombreMedico" required>
+            </div>
+            <div class="form-group">
+                <label for="especialidadMedico">Especialidad:</label>
+                <input type="text" class="form-control" id="especialidadMedico" required>
+            </div>
+            <div class="form-group">
+                <label for="centroSanitarioMedico">Centro Sanitario:</label>
+                <input type="text" class="form-control" id="centroSanitarioMedico" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="registrarMedico()">Registrar Médico</button>
+            <div id="transactionResultContainer">
+                <p id="transactionResult"></p>
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+    <script>
+        async function registrarMedico() {
+            try {
+                if (typeof window.ethereum !== 'undefined') {
+                    await window.ethereum.enable();
+                    const web3MetaMask = new Web3(window.ethereum);
+                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
+                    const contractAddress = '0x9e8c07fc1D181F53f76BCC1948a066fC1322DC71';
+                    const response = await fetch('../contracts/HistoriaClinica.json');
+                    const Codabi = await response.json();
+                    const miContrato = new web3MetaMask.eth.Contract(Codabi.abi, contractAddress);
+
+                    const direccionMedico = document.getElementById('direccionMedico').value;
+                    const dniMedico = document.getElementById('dniMedico').value;
+                    const nombreMedico = document.getElementById('nombreMedico').value;
+                    const especialidadMedico = document.getElementById('especialidadMedico').value;
+                    const centroSanitarioMedico = document.getElementById('centroSanitarioMedico').value;
+
+                    await miContrato.methods.registrarMedico(direccionMedico, dniMedico, nombreMedico, especialidadMedico, centroSanitarioMedico).send({ from: accounts[0] });
+
+                    alert('Médico registrado exitosamente.');
+                }
+            } catch (error) {
+                document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+            }
+        }
+
+        function redirigirPagina(pagina) {
+            switch (pagina) {
+                case 'registrarMedico':
+                    window.location.href = 'registroMedico.html';
+                    break;
+                case 'registrarEnfermero':
+                    window.location.href = 'registroEnfermero.html';
+                    break;
+                case 'panelAdministrador':
+                    window.location.href = 'index.html';
+                    break;
+                default:
+                    break;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
