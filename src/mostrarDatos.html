@@ -1,71 +1,43 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Historia Clínica App</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
-        }
-
-        .menu-container {
-            background-color: #343a40;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .menu-item {
-            display: inline-block;
-            margin-right: 10px;
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-        }
-
-        #pacienteInfo, #enfermeroInfo {
-            margin-top: 20px;
-        }
-    </style>
 </head>
+
 <body>
 
-<div class="menu-container">
-    <div class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</div>
-    <div class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</div>
-    <div class="menu-item" onclick="cargarInformacion()">Cargar Información</div>
-</div>
-
-<div class="container mt-5">
-    <h1>Historia Clínica App</h1>
-    
-    <div id="pacienteInfo">
-        <h2>Información de Pacientes</h2>
+    <div class="container mt-5">
+        <h1>Historia Clínica App</h1>
+        <form id="obtenerDatosPacienteForm">
+            <h2>Obtener Datos del Paciente</h2>
+            <div class="form-group">
+                <label for="dniPaciente">DNI del Paciente:</label>
+                <input type="text" class="form-control" id="dniPaciente" required>
+            </div>
+            <button type="button" class="btn btn-primary" onclick="mostrarDatos()">Obtener Datos del Paciente</button>
+            <div id="datosPacienteContainer">
+            </div>
+        </form>
+        <h2>Lista de Pacientes</h2>
         <ul id="listaPacientes"></ul>
-    </div>
 
-    <div id="enfermeroInfo">
-        <h2>Información de Enfermeros</h2>
+        <h2>Lista de Médicos</h2>
+        <ul id="listaMedicos"></ul>
+
+        <h2>Lista de Enfermeros</h2>
         <ul id="listaEnfermeros"></ul>
     </div>
-</div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-<script src="mostrarDatos.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="mostrarDatos.js"></script>
 
 </body>
+
 </html>

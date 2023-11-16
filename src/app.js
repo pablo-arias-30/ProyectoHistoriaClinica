@@ -8,8 +8,8 @@ async function obtenerHashNodosActivos() {
           const accounts = await window.ethereum.request({ method: 'eth_accounts' });
           const nodeId = await web3MetaMask.eth.getNodeInfo();
           const peerCount = await web3MetaMask.eth.net.getPeerCount();
-          const contractAddress = '0x9e8c07fc1D181F53f76BCC1948a066fC1322DC71';
-          const response = await fetch('../contracts/HistoriaClinica.json');
+          const contractAddress = '0xDFCA09868a46C440148544958E1De1FC96A56409';
+          const response = await fetch('../build/contracts/HistoriaClinica.json');
           const Codabi = await response.json();
           // Crea una instancia del contrato
           const miContrato = new web3MetaMask.eth.Contract(Codabi.abi, contractAddress);

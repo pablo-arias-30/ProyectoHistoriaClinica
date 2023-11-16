@@ -6,8 +6,8 @@ async function registrarEnfermero() {
             await window.ethereum.enable();
             const web3MetaMask = new Web3(window.ethereum);
             const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            const contractAddress = '0x9e8c07fc1D181F53f76BCC1948a066fC1322DC71'; // Cambia esto con la dirección de tu contrato
-            const response = await fetch('../contracts/HistoriaClinica.json');
+            const contractAddress = '0xDFCA09868a46C440148544958E1De1FC96A56409'; // Cambia esto con la dirección de tu contrato
+            const response = await fetch('../build/contracts/HistoriaClinica.json');
             const Codabi = await response.json();
             // Crea una instancia del contrato
             const miContrato = new web3MetaMask.eth.Contract(Codabi.abi, contractAddress);

@@ -76,32 +76,10 @@
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="registrarMedico.js"></script>
+
 
     <script>
-        async function registrarMedico() {
-            try {
-                if (typeof window.ethereum !== 'undefined') {
-                    await window.ethereum.enable();
-                    const web3MetaMask = new Web3(window.ethereum);
-                    const accounts = await window.ethereum.request({ method: 'eth_accounts' });
-                    const contractAddress = '0x9e8c07fc1D181F53f76BCC1948a066fC1322DC71';
-                    const response = await fetch('../contracts/HistoriaClinica.json');
-                    const Codabi = await response.json();
-                    const miContrato = new web3MetaMask.eth.Contract(Codabi.abi, contractAddress);
-
-                    const direccionMedico = document.getElementById('direccionMedico').value;
-                    const dniMedico = document.getElementById('dniMedico').value;
-                    const especialidadMedico = document.getElementById('especialidadMedico').value;
-                    const centroSanitarioMedico = document.getElementById('centroSanitarioMedico').value;
-
-                    await miContrato.methods.registrarMedico(direccionMedico, dniMedico, especialidadMedico, centroSanitarioMedico).send({ from: accounts[0] });
-
-                    alert('Médico registrado exitosamente.');
-                }
-            } catch (error) {
-                document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
-            }
-        }
 
         function redirigirPagina(pagina) {
             switch (pagina) {

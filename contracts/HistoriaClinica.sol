@@ -224,5 +224,23 @@ function modificarCita(uint8 indice, Medico memory _medico, string memory _datos
 function crearConsulta(Consulta memory nuevaConsulta) public {
     consultas.push(nuevaConsulta);
 }
+
+function obtenerMedicos() public view returns (Medico[] memory) {
+        require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
+        return medicos;
+    }
+
+    function obtenerEnfermeros() public view returns (Enfermero[] memory) {
+        require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
+        return enfermeros;
+    }
+function obtenerDatosPaciente(string memory _DNI) public view returns (Paciente memory) {
+        require(
+        msg.sender == owner || msg.sender == pacientes[_DNI].datos.direccionPublica || msg.sender == medicos[pacientes[_DNI].medico_asignado].datos.direccionPublica,
+        "Solo el administrador, el medico asignado o el propio paciente pueden obtener estos datos"
+    );
+    return pacientes[_DNI];
+}
+
 }
 

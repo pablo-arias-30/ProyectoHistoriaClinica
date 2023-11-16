@@ -1,4 +1,4 @@
-const contract = new web3.eth.Contract("../contracts/HistoriaClinica.json", "0x34CB52ab6934236A8AAa662d1791BecbD2f29CEb");
+const contract = new web3.eth.Contract("../contracts/HistoriaClinica.json", "0xcDB801946CbB2cAcFB95B84cF0eCe1d7e893e6B9");
 
 const direccionesPacientes = await historiaClinica.methods.direccionesPacientes().call();
 const direccionesMedicos = await historiaClinica.methods.direccionesMedicos().call();

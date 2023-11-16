@@ -1,5 +1,5 @@
 // Agrega tus funciones JavaScript aquí
-async function registrarMedico() {
+async function registrarPaciente() {
     try {
         if (typeof window.ethereum !== 'undefined') {
             // Conecta la aplicación a MetaMask
@@ -13,16 +13,15 @@ async function registrarMedico() {
             // Crea una instancia del contrato
             const miContrato = new web3MetaMask.eth.Contract(Codabi.abi, contractAddress);
             // Obtiene los valores del formulario
-            const direccionMedico = document.getElementById('direccionMedico').value;
-            const dniMedico = document.getElementById('dniMedico').value;
-            const especialidadMedico = document.getElementById('especialidadMedico').value;
-            const centroSanitarioMedico = document.getElementById('centroSanitarioMedico').value;
+            const dniPaciente = document.getElementById('dniPaciente').value;
+            const centroSanitarioPaciente = document.getElementById('centroSanitarioPaciente').value;
+            const datosPaciente = document.getElementById('datosPaciente').value;
 
-            // Llama a la función del contrato para registrar médicos
-            await miContrato.methods.registrarMedico(direccionMedico, dniMedico, especialidadMedico, centroSanitarioMedico).send({ from: accounts[0] });
+            // Llama a la función del contrato para registrar pacientes
+            await miContrato.methods.registrarPaciente(dniPaciente, centroSanitarioPaciente, datosPaciente).send({ from: accounts[0] });
 
             // Actualiza la interfaz o muestra un mensaje de éxito
-            alert('Médico registrado exitosamente.');
+            alert('Paciente registrado exitosamente.');
         }
     } catch (error) {
         document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
