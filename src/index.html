@@ -5,10 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Panel Administrador</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Agregamos la fuente de Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Agregamos FontAwesome para el icono de reloj -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <style>
         body {
             background-color: #f8f9fa;
+            font-family: 'Roboto', sans-serif;
+            /* Aplicamos la fuente Roboto a todo el cuerpo del documento */
         }
 
         .container {
@@ -16,57 +23,153 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .header {
+            background-color: #ffffff;
+            padding: 5px;
+            border-radius: 5px 5px 0 0;
+            color: #007bff;
+            margin-bottom: 5px;
+            position: relative;
+        }
+
+        .header h1 {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+
+        .header img {
+            margin-right: 10px;
+        }
+
+        #app-title {
+            display: flex;
+            align-items: center;
+        }
+
+        #app-title-text {
+            margin-right: 10px;
+            font-weight: bold;
+            font-size: 24px;
+            color: #333;
+        }
+
+        #current-time {
+            font-size: 20px;
+            color: #333;
+            display: flex;
+            align-items: center;
+            /* Cambiado de 'baseline' a 'center' */
+        }
+
+        #clock-icon {
+            margin-right: 10px;
+            /* Espacio entre el icono y la hora */
         }
 
         .menu-container {
             background-color: #343a40;
             padding: 10px;
             border-radius: 10px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
             margin-bottom: 20px;
         }
 
         .menu-item {
-            display: inline-block;
-            margin-right: 10px;
             color: #ffffff;
             font-weight: bold;
             font-size: 18px;
             cursor: pointer;
+            text-decoration: none;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .menu-item:hover {
+            background-color: #ccc;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .content {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+        }
+
+        .feature {
+            width: 30%;
+            margin: 10px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .feature img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 5px;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 
-<body>
+<body onload="connectMetamask(); actualizaReloj(); ">
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span id="app-title">
+                    <a href="index.html">
+                        <img src="../src/images/icono.png" alt="Icono" height="50px">
+                        <span id="app-title-text">dApp Historia Clínica</span></a>
+                </span>
+                <span id="current-time">
+                    <img id="clock-icon" src="../src/images/reloj.png" alt="Reloj" height="20px">
+                    <span id="clock-time"></span> <!-- Agregado un contenedor para la hora -->
+                </span>
+            </h1>
+        </div>
 
-    <div class="menu-container">
-        <div class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</div>
-        <div class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</div>
-        <div class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</div>
-        <div class="menu-item" onclick="redirigirPagina('mostrarDatos')">Mostrar Datos</div>
+        <div class="menu-container">
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</a>
+        </div>
+
+        <div class="content">
+            <div class="feature">
+                <img src="../src/images/medico.png" alt="Médico">
+                <p>Registra a los médicos de tu centro de salud</p>
+            </div>
+
+            <div class="feature">
+                <img src="../src/images/enfermero.png" alt="Enfermero">
+                <p>Registra a los enfermeros y enfermeras</p>
+            </div>
+
+            <div class="feature">
+                <img src="../src/images/paciente.png" alt="Paciente">
+                <p>Registra a los pacientes</p>
+            </div>
+
+            <div class="feature">
+                <img src="../src/images/panel.png" alt="Panel">
+                <p>Accede al panel de administrador para gestionar usuarios</p>
+            </div>
+        </div>
     </div>
-
-    <script>
-        function redirigirPagina(pagina) {
-            switch (pagina) {
-                case 'registrarMedico':
-                    window.location.href = 'registroMedico.html';
-                    break;
-                case 'registrarEnfermero':
-                    window.location.href = 'registroEnfermero.html';
-                    break;
-                case 'panelAdministrador':
-                    window.location.href = 'index.html';
-                    break;
-                case 'mostrarDatos':
-                    window.location.href = 'mostrarDatos.html';
-                    break;
-                default:
-                    break;
-            }
-        }
-    </script>
-
+    <script src="app.js"></script>
 </body>
 
 </html>
