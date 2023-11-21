@@ -10,7 +10,8 @@
     <!-- Fuente de Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <!-- Icono de reloj -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">    
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style_registros.css">
 
 </head>
@@ -32,12 +33,32 @@
         </div>
 
         <div class="menu-container">
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</a>
-        </div>
+    <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">
+        <i class="fas fa-user-md"></i> Médico
+        <ul class="submenu" id="medico-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
+            <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
+        </ul>
+    </div>
+
+    <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')" onmouseout="ocultarSubMenu('paciente')">
+        <i class="fas fa-user"></i> Paciente
+        <ul class="submenu" id="paciente-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</li>
+            <li class="submenu-item" onclick="redirigirPagina('datosPaciente')">Mis datos</li>
+        </ul>
+    </div>
+
+    <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')" onmouseout="ocultarSubMenu('admin')">
+        <i class="fas fa-cogs"></i> Administrador
+        <ul class="submenu" id="admin-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</li>
+            <li class="submenu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</li>
+            <li class="submenu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</li>
+            <li class="submenu-item" onclick="redirigirPagina('mostrarDatos')">Mostrar Datos</li>
+        </ul>
+    </div>
+</div>
 
         <div class="form-container">
             <form id="registrarMedicoForm">

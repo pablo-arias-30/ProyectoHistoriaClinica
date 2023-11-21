@@ -69,7 +69,10 @@ contract HistoriaClinica {
         string datos_cita;
         tipo_consulta tipoConsulta;
     }
-
+    modifier soloAdmin() {
+        require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
+        _;
+    }
 function registrarPaciente(string memory _DNI, string memory _centroSanitario, string memory _datosPaciente) public {
     require(pacientes[_DNI].datos.direccionPublica == address(0), "Este paciente ya esta registrado");
     Persona memory datosPersonales = Persona({
@@ -87,8 +90,7 @@ asignarMedico(_DNI);
 
 }
 
-    function registrarMedico(address _direccionMedico, string memory _DNI, string memory _especialidad, string memory _centro_sanitario) public {
-    require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
+    function registrarMedico(address _direccionMedico, string memory _DNI, string memory _especialidad, string memory _centro_sanitario) public soloAdmin() {
         Persona memory datosPersonales = Persona(_direccionMedico,_DNI);
         medicos.push(Medico({
         centro_sanitario: _centro_sanitario,
@@ -98,8 +100,7 @@ asignarMedico(_DNI);
     }));
 }
 
- function registrarEnfermero(address _direccionEnfermero ,string memory _DNI, string memory _especialidad, string memory _centro_sanitario) public {
-        require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
+ function registrarEnfermero(address _direccionEnfermero ,string memory _DNI, string memory _especialidad, string memory _centro_sanitario) public soloAdmin() {
         Persona memory datosPersonales = Persona (_direccionEnfermero,_DNI);
         enfermeros.push(Enfermero({
         especialidad: _especialidad,
@@ -221,12 +222,10 @@ function crearConsulta(Consulta memory nuevaConsulta) public {
     consultas.push(nuevaConsulta);
 }
 
-function obtenerMedicos() public view returns (Medico[] memory) {
-        require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
+function obtenerMedicos() public view soloAdmin returns (Medico[] memory) {
         return medicos;
     }
-    function obtenerEnfermeros() public view returns (Enfermero[] memory) {
-        require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
+    function obtenerEnfermeros() public view soloAdmin returns (Enfermero[] memory) {
         return enfermeros;
     }
 function obtenerDatosPaciente(string memory _DNI) public view returns (Paciente memory) {
@@ -237,4 +236,3 @@ function obtenerDatosPaciente(string memory _DNI) public view returns (Paciente 
     return pacientes[_DNI];
 }
 }
-

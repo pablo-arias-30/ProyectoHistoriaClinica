@@ -6,6 +6,7 @@
     <title>Error Page</title>
     <!-- Enlace a Bootstrap CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             background-color: #f8f9fa;
@@ -29,7 +30,30 @@
     </style>
 </head>
 <body>
-
+    <div class="menu-container">
+        <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">Médico
+            <ul class="submenu" id="medico-submenu">
+                <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
+                <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
+            </ul>
+        </div>
+    
+        <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')" onmouseout="ocultarSubMenu('paciente')">Paciente
+            <ul class="submenu" id="paciente-submenu">
+                <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</li>
+                <li class="submenu-item" onclick="redirigirPagina('datosPaciente')">Mis datos</li>
+            </ul>
+        </div>
+    
+        <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')" onmouseout="ocultarSubMenu('admin')">Administrador
+            <ul class="submenu" id="admin-submenu">
+                <li class="submenu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</li>
+                <li class="submenu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</li>
+                <li class="submenu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</li>
+                <li class="submenu-item" onclick="redirigirPagina('mostrarDatos')">Mostrar Datos</li>
+            </ul>
+        </div>
+    </div>
 <div class="container error-container">
     <div class="row">
         <div class="col-md-12">

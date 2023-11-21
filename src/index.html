@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <!-- Icono de reloj -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
         body {
             background: url('../src/images/fondo.jpg') center center fixed;
@@ -122,6 +123,69 @@
             border-radius: 5px;
             margin-bottom: 10px;
         }
+        .menu-container {
+        background-color: #343a40;
+        padding: 10px;
+        border-radius: 10px;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        margin-bottom: 20px;
+    }
+    
+    .menu-item {
+        color: #ffffff;
+        font-weight: bold;
+        font-size: 20px;
+        cursor: pointer;
+        text-decoration: none;
+        padding: 15px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        position: relative;
+        min-width: 150px; /* Ancho mínimo para coincidir visualmente */
+    }
+    
+    .menu-item:hover {
+        background-color: #555;
+        color: #fff;
+        text-decoration: none;
+    }
+    
+    .submenu {
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        background-color: #343a40;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        z-index: 1;
+    }
+    
+    .menu-item:hover .submenu {
+        display: block;
+    }
+    
+    .submenu-item {
+        padding: 12px;
+        border-radius: 5px;
+        transition: background-color 0.3s;
+        width: 200px; /* Ancho ajustado */
+        white-space: nowrap;
+        font-size: 16px; /* Tamaño de fuente ajustado */
+    }
+    
+    .submenu-item:hover {
+        background-color: #555;
+        color: #fff;
+        cursor: pointer;
+        min-width: 200px; /* Ancho mínimo para coincidir visualmente */
+    }
+    
     </style>
 </head>
 
@@ -141,14 +205,34 @@
             </h1>
         </div>
 
-        <div class="menu-container">
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('datosPaciente')">Mis datos</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</a>
-        </div>
+<div class="menu-container">
+    <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">
+        <i class="fas fa-user-md"></i> Médico
+        <ul class="submenu" id="medico-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
+            <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
+        </ul>
+    </div>
+
+    <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')" onmouseout="ocultarSubMenu('paciente')">
+        <i class="fas fa-user"></i> Paciente
+        <ul class="submenu" id="paciente-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</li>
+            <li class="submenu-item" onclick="redirigirPagina('datosPaciente')">Mis datos</li>
+        </ul>
+    </div>
+
+    <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')" onmouseout="ocultarSubMenu('admin')">
+        <i class="fas fa-cogs"></i> Administrador
+        <ul class="submenu" id="admin-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</li>
+            <li class="submenu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</li>
+            <li class="submenu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</li>
+            <li class="submenu-item" onclick="redirigirPagina('mostrarDatos')">Mostrar Datos</li>
+        </ul>
+    </div>
+</div>
+
 
         <div class="content">
             <div class="feature">
@@ -169,7 +253,10 @@
                 <img src="../src/images/cita.png" alt="Pedir Cita">
                 <p>Pide cita</p>
             </div>
-
+            <div class="feature">
+                <img src="../src/images/consulta.jpg" alt="Atender consulta">
+                <p>Atiende una consulta</p>
+            </div>
             <div class="feature">
                 <img src="../src/images/panel.png" alt="Panel">
                 <p>Accede al panel de administrador para gestionar usuarios</p>

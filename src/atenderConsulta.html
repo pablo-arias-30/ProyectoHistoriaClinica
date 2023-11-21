@@ -4,12 +4,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Médico - Historia Clínica App</title>
+    <title>Solicitar Cita - Historia Clínica App</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Agregamos la fuente de Google Fonts -->
+    <!-- Fuente de Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <!-- Agregamos FontAwesome para el icono de reloj -->
+    <!-- Icono de reloj -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style_registros.css">
@@ -58,33 +58,63 @@
         </ul>
     </div>
 </div>
+    <div class="container">
+        <h1 class="text-center">Solicitar Cita</h1>
 
-        <div class="form-container">
-            <form id="registrarMedicoForm">
-                <h2 class="form-title">Registrar Enfermero</h2>
-                <div class="form-group">
-                    <label for="direccionMedico">Dirección Pública del Enfermero:</label>
-                    <input type="text" class="form-control" id="direccionEnfermero" required>
-                </div>
-                <div class="form-group">
-                    <label for="dniEnfermero">DNI:</label>
-                    <input type="text" class="form-control" id="dniEnfermero" required>
-                </div>
-                <div class="form-group">
-                    <label for="especialidadEnfermero">Especialidad:</label>
-                    <input type="text" class="form-control" id="especialidadEnfermero" required>
-                </div>
-                <div class="form-group">
-                    <label for="centroSanitarioEnfermero">Centro Sanitario:</label>
-                    <input type="text" class="form-control" id="centroSanitarioEnfermero" required>
-                </div>
-                <button type="button" class="btn btn-primary" onclick="registrarEnfermero()">Registrar Enfermero</button>
-                <div id="transactionResultContainer">
+        <div class="container">
+            <h1 class="text-center">Atender Consulta</h1>
+
+            <div class="form-container">
+                <form id="atenderConsultaForm">
+                    <div class="form-group">
+                        <label for="dniPacienteAtender">Introduzca DNI del Paciente:</label>
+                        <input type="text" class="form-control" id="dniPacienteAtender" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaConsulta">Fecha de la Consulta:</label>
+                        <input type="date" class="form-control" id="fechaConsulta" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="horaConsulta">Hora de la Consulta:</label>
+                        <input type="time" class="form-control" id="horaConsulta" required>
+                    </div>
+                    <!-- Agregar más campos según sea necesario -->
+                    <div class="form-group">
+                        <label for="motivoConsulta">Motivo de la Consulta:</label>
+                        <input type="text" class="form-control" id="motivoConsulta">
+                    </div>
+                    <div class="form-group">
+                        <label for="examenesRealizados">Exámenes Realizados:</label>
+                        <input type="text" class="form-control" id="examenesRealizados">
+                    </div>
+                    <div class="form-group">
+                        <label for="problemaSalud">Problema de salud:</label>
+                        <input type="text" class="form-control" id="problemaSalud">
+                    </div>
+                    <div class="form-group">
+                        <label for="medicacionPropuesta">Medicación Propuesta:</label>
+                        <input type="text" class="form-control" id="medicacionPropuesta">
+                    </div>
+                    <div class="form-group">
+                        <label for="tiempoEntreTomas">Tiempo entre Tomas:</label>
+                        <input type="text" class="form-control" id="tiempoEntreTomas">
+                    </div>
+                    <div class="form-group">
+                        <label for="dosis">Dosis:</label>
+                        <input type="text" class="form-control" id="dosis">
+                    </div>
+
+                    <button type="button" class="btn btn-primary" onclick="atenderConsulta()">Atender Consulta</button>
+                    <div id="transactionResultContainer">
                     <p id="transactionResult"></p>
                 </div>
             </form>
         </div>
     </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <script src="app.js"></script>
 </body>
 

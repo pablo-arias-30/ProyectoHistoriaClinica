@@ -2,7 +2,7 @@
 let miContrato;
 let web3MetaMask;
 let accounts;
-const contractAddress = '0x20790dAda36815a6a48Ad1B03608f4F9267fdBd7';
+const contractAddress = '0x25E0c625745360848C34ba3F942BAC1FCd0a8f41';
 
 
 function actualizaReloj() {
@@ -107,18 +107,28 @@ async function registrarMedico() {
 
 async function registrarPaciente() {
     try {
-        console.log(miContrato.abi);
         const dniPaciente = document.getElementById('dniPaciente').value;
         const centroSanitarioPaciente = document.getElementById('centroSanitarioPaciente').value;
-        const datosPaciente = document.getElementById('datosPaciente').value;
 
+        // Agrupa los datos del paciente con el separador ":"
+        const datosPaciente = [
+            document.getElementById('nombreCompleto').value,
+            document.getElementById('direccion').value,
+            document.getElementById('nacionalidad').value,
+            document.getElementById('fechaNacimiento').value,
+            document.getElementById('alergias').value,
+            document.getElementById('grupoSanguineo').value,
+            document.getElementById('peso').value,
+            document.getElementById('altura').value,
+            document.getElementById('vacunas').value
+        ].join(':');
         let paciente = await miContrato.methods.registrarPaciente(dniPaciente, centroSanitarioPaciente, datosPaciente).send({ from: accounts[0] });
         alert('Paciente con DNI ' + dniPaciente + ' registrado exitosamente.');
-    }
-    catch (error) {
+    } catch (error) {
         document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
     }
 }
+
 async function solicitarCita() {
     try {
         // Obtén los valores del formulario
@@ -144,10 +154,9 @@ async function solicitarCita() {
 async function obtenerCitasPorPaciente() {
     try {
         const dniPaciente = document.getElementById('dniPaciente').value;
-        let citas = await miContrato.citas[0];
+        let citas = await miContrato.obtenerCitas(dniPaciente).call({ from: accounts[0] });
         var listaCitas = document.getElementById("listaCitas");
         listaCitas.innerHTML = ""; // Limpiamos la lista
-    
         citas.forEach(function (cita) {
             var listItem = document.createElement("li");
             listItem.className = "list-group-item";
@@ -158,8 +167,46 @@ async function obtenerCitasPorPaciente() {
         document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
     }
 }
+async function atenderConsulta() {
+    try {
+        const dniPacienteAtender = document.getElementById('dniPacienteAtender').value;
+        const fechaConsulta = document.getElementById('fechaConsulta').value;
+        const horaConsulta = document.getElementById('horaConsulta').value;
+        const motivoConsulta = document.getElementById('motivoConsulta').value;
+        const problemaSalud = document.getElementById('problemaSalud').value;
+        const examenesRealizados = document.getElementById('examenesRealizados').value;
+        const medicacionPropuesta = document.getElementById('medicacionPropuesta').value;
+        const tiempoEntreTomas = document.getElementById('tiempoEntreTomas').value;
+        const dosis = document.getElementById('dosis').value;
 
+        const datosConsultaAtender = `${motivoConsulta}:${examenesRealizados}:${problemaSalud}:${medicacionPropuesta}:${tiempoEntreTomas}:${dosis}`;
+        const result = await miContrato.methods.atenderConsulta(
+            dniPacienteAtender,
+            Date.parse(fechaConsulta + ' ' + horaConsulta) / 1000, // Convierte la fecha y hora a un timestamp Unix
+            parseInt(horaConsulta), // Convierte la hora a un entero
+            datosConsultaAtender
+        ).send({ from: accounts[0] });
 
+        console.log(result);
+        alert('Consulta atendida exitosamente.');
+    } catch (error) {
+        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+    }
+}
+
+function mostrarSubMenu(submenuId) {
+    var submenu = document.getElementById(submenuId + '-submenu');
+    if (submenu) {
+        submenu.style.display = 'block';
+    }
+}
+
+function ocultarSubMenu(submenuId) {
+    var submenu = document.getElementById(submenuId + '-submenu');
+    if (submenu) {
+        submenu.style.display = 'none';
+    }
+}
 
 function redirigirPagina(pagina) {
     switch (pagina) {
@@ -178,8 +225,14 @@ function redirigirPagina(pagina) {
             case 'pedirCita':
             window.location.href = 'pedirCita.html';
             break;
+            case 'atenderConsulta':
+            window.location.href = 'atenderConsulta.html';
+            break;
             case 'datosPaciente':
             window.location.href = 'datosPaciente.html';
+            break;
+            case 'mostrarDatos':
+            window.location.href = 'mostrarDatos.html';
             break;
         default:
             break;

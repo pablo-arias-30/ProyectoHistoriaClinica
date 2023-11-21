@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
     <!-- Agregamos FontAwesome para el icono de reloj -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style_registros.css">
 </head>
 
@@ -31,12 +32,32 @@
         </div>
 
         <div class="menu-container">
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</a>
-            <a href="#" class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</a>
-        </div>
+    <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">
+        <i class="fas fa-user-md"></i> Médico
+        <ul class="submenu" id="medico-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
+            <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
+        </ul>
+    </div>
+
+    <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')" onmouseout="ocultarSubMenu('paciente')">
+        <i class="fas fa-user"></i> Paciente
+        <ul class="submenu" id="paciente-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</li>
+            <li class="submenu-item" onclick="redirigirPagina('datosPaciente')">Mis datos</li>
+        </ul>
+    </div>
+
+    <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')" onmouseout="ocultarSubMenu('admin')">
+        <i class="fas fa-cogs"></i> Administrador
+        <ul class="submenu" id="admin-submenu">
+            <li class="submenu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</li>
+            <li class="submenu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</li>
+            <li class="submenu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</li>
+            <li class="submenu-item" onclick="redirigirPagina('mostrarDatos')">Mostrar Datos</li>
+        </ul>
+    </div>
+</div>
 
         <div class="form-container">
             <form id="registrarMedicoForm">
@@ -50,8 +71,40 @@
                     <input type="text" class="form-control" id="centroSanitarioPaciente" required>
                 </div>
                 <div class="form-group">
-                    <label for="datosPaciente">Datos del paciente separados por ":" :</label>
-                    <input type="text" class="form-control" id="datosPaciente" required>
+                    <label for="nombreCompleto">Nombre Completo:</label>
+                    <input type="text" class="form-control" id="nombreCompleto" required>
+                </div>
+                <div class="form-group">
+                    <label for="direccion">Dirección:</label>
+                    <input type="text" class="form-control" id="direccion" required>
+                </div>
+                <div class="form-group">
+                    <label for="nacionalidad">Nacionalidad:</label>
+                    <input type="text" class="form-control" id="nacionalidad" required>
+                </div>
+                <div class="form-group">
+                    <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                    <input type="date" class="form-control" id="fechaNacimiento" required>
+                </div>
+                <div class="form-group">
+                    <label for="alergias">Alergias:</label>
+                    <input type="text" class="form-control" id="alergias" required>
+                </div>
+                <div class="form-group">
+                    <label for="grupoSanguineo">Grupo Sanguíneo:</label>
+                    <input type="text" class="form-control" id="grupoSanguineo" required>
+                </div>
+                <div class="form-group">
+                    <label for="peso">Peso (kg):</label>
+                    <input type="number" class="form-control" id="peso" required>
+                </div>
+                <div class="form-group">
+                    <label for="altura">Altura (cm):</label>
+                    <input type="number" class="form-control" id="altura" required>
+                </div>
+                <div class="form-group">
+                    <label for="Vacunas administradas">Vacunas Administradas:</label>
+                    <input type="text" class="form-control" id="vacunas" required>
                 </div>
                 <button type="button" class="btn btn-primary" onclick="registrarPaciente()">Registrar Paciente</button>
                 <div id="transactionResultContainer">
