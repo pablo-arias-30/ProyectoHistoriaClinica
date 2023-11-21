@@ -136,9 +136,7 @@ asignarMedico(_DNI);
         return indiceMedicoConMenosPacientes;
     }
 
-    
- //Paciente pide una cita
-function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string memory _datos_consulta, string memory _datos_cita, tipo_consulta _tipoConsulta) public {
+    function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string memory _datos_cita, tipo_consulta _tipoConsulta) public {
     require(pacientes[_DNI].medico_asignado < type(uint256).max, "El paciente no tiene un medico asignado");
     require(_hora >= 8 && _hora <= 18, "La clinica solo atiende entre las 8:00 y las 18:00.");
     require(_fecha >= block.timestamp, "No se pueden programar citas anteriores a este momento.");
@@ -174,7 +172,7 @@ function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string m
         medico:medico,
         fecha: _fecha,
         hora:_hora,
-        datos_consulta:_datos_consulta,
+        datos_consulta:_datos_cita,
         estado: estado_consulta.programada,
         tipo: _tipoConsulta
     }));
@@ -184,7 +182,6 @@ function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string m
     }
 
 }
- 
 function atenderConsulta (string memory _DNI, uint _fecha, uint _hora, string memory _datos_consulta) public {
     Paciente memory paciente = pacientes[_DNI];
     require(msg.sender ==  medicos[pacientes[_DNI].medico_asignado].datos.direccionPublica, "Solo el medico puede atender la consulta"); 
@@ -218,7 +215,6 @@ function modificarCita(uint8 indice, Medico memory _medico, string memory _datos
     citas[indice].hora=_nuevaHora;
     citas[indice].datos_cita=_datos_cita;
     citas[indice].tipoConsulta = _nuevoTipoConsulta;
-    
 }
 //Medico crea consulta (especialidad o no)
 function crearConsulta(Consulta memory nuevaConsulta) public {
@@ -229,7 +225,6 @@ function obtenerMedicos() public view returns (Medico[] memory) {
         require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
         return medicos;
     }
-
     function obtenerEnfermeros() public view returns (Enfermero[] memory) {
         require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
         return enfermeros;
@@ -241,6 +236,5 @@ function obtenerDatosPaciente(string memory _DNI) public view returns (Paciente 
     );
     return pacientes[_DNI];
 }
-
 }
 

@@ -4,53 +4,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia Clínica App</title>
+    <title>Registrar Médico - Historia Clínica App</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            max-width: 800px;
-            background-color: #ffffff;
-            padding: 20px;
-            margin-top: 30px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-        }
-
-        h1, h2 {
-            color: #007bff;
-        }
-
-        button {
-            background-color: #007bff;
-            color: #fff;
-        }
-
-        #datosPacienteContainer {
-            margin-top: 20px;
-        }
-
-        ul {
-            padding: 0;
-            list-style: none;
-        }
-
-        li {
-            margin-bottom: 10px;
-        }
-    </style>
+    <!-- Agregamos la fuente de Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Agregamos FontAwesome para el icono de reloj -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style_registros.css">
 </head>
 
-<body onload="connectMetamask()">
+<body onload="connectMetamask(); actualizaReloj();">
     <div class="container">
-        <h1 class="text-center">Historia Clínica App</h1>
+        <div class="header">
+            <h1>
+                <span id="app-title">
+                    <a href="index.html">
+                        <img src="../src/images/icono.png" alt="Icono" height="50px">
+                        <span id="app-title-text">dApp Historia Clínica</span></a>
+                </span>
+                <span id="current-time">
+                    <img id="clock-icon" src="../src/images/reloj.png" alt="Reloj" height="20px">
+                    <span id="clock-time"></span> <!-- Agregado un contenedor para la hora -->
+                </span>
+            </h1>
+        </div>
 
-        <div class="card mt-4">
-            <button type="button" class="btn btn-primary" onclick="mostrarDatos()">Cargar Datos</button>
+        <div class="menu-container">
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</a>
+        </div>
+
+        <div class="form-container">
             <div class="card-body">
                 <form id="obtenerDatosPacienteForm">
                     <h2>Obtener Datos del Paciente</h2>
@@ -61,28 +49,28 @@
                     <div id="datosPacienteContainer"></div>
                 </form>
             </div>
-        </div>
+            <div class="mt-4">
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h2>Lista de Médicos</h2>
+                        <ul id="listaMedicos"></ul>
+                    </div>
+                </div>
 
-        <div class="mt-4">
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h2>Lista de Médicos</h2>
-                    <ul id="listaMedicos"></ul>
+                <div class="card mt-4">
+                    <div class="card-body">
+                        <h2>Lista de Enfermeros</h2>
+                        <ul id="listaEnfermeros"></ul>
+                    </div>
                 </div>
             </div>
-
-            <div class="card mt-4">
-                <div class="card-body">
-                    <h2>Lista de Enfermeros</h2>
-                    <ul id="listaEnfermeros"></ul>
-                </div>
+            <div id="transactionResultContainer">
+                <p id="transactionResult"></p>
             </div>
+            </form>
+            <button type="button" class="btn btn-primary" onclick="mostrarDatos()">Cargar Datos</button>
         </div>
     </div>
-
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <script src="app.js"></script>
 </body>
 

@@ -4,98 +4,63 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia Clínica App</title>
+    <title>Registrar Médico - Historia Clínica App</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        body {
-            background-color: #f8f9fa;
-        }
-
-        .container {
-            background-color: #ffffff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            margin-top: 50px;
-        }
-
-        .menu-container {
-            background-color: #343a40;
-            padding: 10px;
-            border-radius: 10px;
-            margin-bottom: 20px;
-        }
-
-        .menu-item {
-            display: inline-block;
-            margin-right: 10px;
-            color: #ffffff;
-            font-weight: bold;
-            font-size: 18px;
-            cursor: pointer;
-        }
-    </style>
+    <!-- Agregamos la fuente de Google Fonts -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
+    <!-- Agregamos FontAwesome para el icono de reloj -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link rel="stylesheet" href="style_registros.css">
 </head>
 
-<body onload="connectMetamask()">
-    <div class="menu-container">
-        <div class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</div>
-        <div class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</div>
-        <div class="menu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</div>
-        <div class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</div>
-    </div>
+<body onload="connectMetamask(); actualizaReloj();">
+    <div class="container">
+        <div class="header">
+            <h1>
+                <span id="app-title">
+                    <a href="index.html">
+                        <img src="../src/images/icono.png" alt="Icono" height="50px">
+                        <span id="app-title-text">dApp Historia Clínica</span></a>
+                </span>
+                <span id="current-time">
+                    <img id="clock-icon" src="../src/images/reloj.png" alt="Reloj" height="20px">
+                    <span id="clock-time"></span> <!-- Agregado un contenedor para la hora -->
+                </span>
+            </h1>
+        </div>
 
-    <div class="container mt-5">
-        <h1>Historia Clínica App</h1>
-        <form id="registrarPacienteForm">
-            <h2>Registrar Paciente</h2>
-            <div class="form-group">
-                <label for="dniPaciente">DNI del Paciente:</label>
-                <input type="text" class="form-control" id="dniPaciente" required>
-            </div>
-            <div class="form-group">
-                <label for="centroSanitarioPaciente">Centro Sanitario:</label>
-                <input type="text" class="form-control" id="centroSanitarioPaciente" required>
-            </div>
-            <div class="form-group">
-                <label for="datosPaciente">Datos del Paciente:</label>
-                <input type="text" class="form-control" id="datosPaciente" required>
-            </div>
-            <button type="button" class="btn btn-primary" onclick="registrarPaciente()">Registrar Paciente</button>
-            <div id="transactionResultContainer">
-                <p id="transactionResult"></p>
-            </div>
-        </form>
-    </div>
+        <div class="menu-container">
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</a>
+            <a href="#" class="menu-item" onclick="redirigirPagina('panelAdministrador')">Panel Administrador</a>
+        </div>
 
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+        <div class="form-container">
+            <form id="registrarMedicoForm">
+                <h2 class="form-title">Registrar Paciente</h2>
+                <div class="form-group">
+                    <label for="dniPaciente">DNI:</label>
+                    <input type="text" class="form-control" id="dniPaciente" required>
+                </div>
+                <div class="form-group">
+                    <label for="centroSanitarioPaciente">Centro Sanitario:</label>
+                    <input type="text" class="form-control" id="centroSanitarioPaciente" required>
+                </div>
+                <div class="form-group">
+                    <label for="datosPaciente">Datos del paciente separados por ":" :</label>
+                    <input type="text" class="form-control" id="datosPaciente" required>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="registrarPaciente()">Registrar Paciente</button>
+                <div id="transactionResultContainer">
+                    <p id="transactionResult"></p>
+                </div>
+            </form>
+        </div>
+    </div>
     <script src="app.js"></script>
-
-    <script>
-        function redirigirPagina(pagina) {
-            switch (pagina) {
-                case 'registrarMedico':
-                    window.location.href = 'registroMedico.html';
-                    break;
-                case 'registrarEnfermero':
-                    window.location.href = 'registroEnfermero.html';
-                    break;
-                case 'registrarPaciente':
-                    window.location.href = 'registroPaciente.html';
-                    break;
-                case 'panelAdministrador':
-                    window.location.href = 'index.html';
-                    break;
-                default:
-                    break;
-            }
-        }
-    </script>
-
 </body>
 
 </html>

@@ -2,6 +2,8 @@
 let miContrato;
 let web3MetaMask;
 let accounts;
+const contractAddress = '0x20790dAda36815a6a48Ad1B03608f4F9267fdBd7';
+
 
 function actualizaReloj() {
     const currentTime = new Date();
@@ -13,25 +15,6 @@ function actualizaReloj() {
     setInterval(actualizaReloj, 1000);
 }
 
-function redirigirPagina(pagina) {
-    switch (pagina) {
-        case 'registrarMedico':
-            window.location.href = 'registroMedico.html';
-            break;
-        case 'registrarEnfermero':
-            window.location.href = 'registroEnfermero.html';
-            break;
-        case 'registrarPaciente':
-            window.location.href = 'registroPaciente.html';
-            break;
-        case 'panelAdministrador':
-            window.location.href = 'mostrarDatos.html';
-            break;
-        default:
-            break;
-    }
-}
-
 async function connectMetamask() {
     try {
         if (typeof window.ethereum !== 'undefined') {
@@ -39,11 +22,11 @@ async function connectMetamask() {
             await window.ethereum.enable();
             web3MetaMask = new Web3(window.ethereum);
             accounts = await window.ethereum.request({ method: 'eth_accounts' });
-            const contractAddress = '0xDFCA09868a46C440148544958E1De1FC96A56409';
             const response = await fetch('../build/contracts/HistoriaClinica.json');
             const Codabi = await response.json();
             // Crea una instancia del contrato
             miContrato = new web3MetaMask.eth.Contract(Codabi.abi, contractAddress);
+            console.log(Codabi.abi);
         } else {
             window.location.href = 'errorMetamask.html';
         }
@@ -124,17 +107,81 @@ async function registrarMedico() {
 
 async function registrarPaciente() {
     try {
+        console.log(miContrato.abi);
         const dniPaciente = document.getElementById('dniPaciente').value;
         const centroSanitarioPaciente = document.getElementById('centroSanitarioPaciente').value;
         const datosPaciente = document.getElementById('datosPaciente').value;
 
-        // Llama a la función del contrato para registrar pacientes
         let paciente = await miContrato.methods.registrarPaciente(dniPaciente, centroSanitarioPaciente, datosPaciente).send({ from: accounts[0] });
-        // Actualiza la interfaz o muestra un mensaje de éxito
-        console.log(paciente);
         alert('Paciente con DNI ' + dniPaciente + ' registrado exitosamente.');
     }
     catch (error) {
         document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+    }
+}
+async function solicitarCita() {
+    try {
+        // Obtén los valores del formulario
+        const fechaCita = document.getElementById('fechaCita').value;
+        const horaCita = document.getElementById('horaCita').value;
+        const datosConsulta = document.getElementById('datosConsulta').value;
+        const tipoConsulta = document.getElementById('tipoConsulta').value;
+        const dniPaciente = document.getElementById('dniPaciente').value;
+        let result = await miContrato.methods.solicitarCita(
+            dniPaciente, 
+            Date.parse(fechaCita + ' ' + horaCita) / 1000, // Convierte la fecha y hora a un timestamp Unix
+            parseInt(horaCita), // Convierte la hora a un entero
+            datosConsulta,
+            tipoConsulta
+        ).send({ from: accounts[0] });
+
+        console.log(result);
+        alert('Cita solicitada exitosamente.');
+    } catch (error) {
+        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+    }
+}
+async function obtenerCitasPorPaciente() {
+    try {
+        const dniPaciente = document.getElementById('dniPaciente').value;
+        let citas = await miContrato.citas[0];
+        var listaCitas = document.getElementById("listaCitas");
+        listaCitas.innerHTML = ""; // Limpiamos la lista
+    
+        citas.forEach(function (cita) {
+            var listItem = document.createElement("li");
+            listItem.className = "list-group-item";
+            listItem.innerHTML = `<strong>Fecha:</strong> ${cita.fecha}, <strong>Hora:</strong> ${cita.hora}, <strong>Motivo:</strong> ${cita.motivo}`;
+            listaCitas.appendChild(listItem);
+        });
+    } catch (error) {
+        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+    }
+}
+
+
+
+function redirigirPagina(pagina) {
+    switch (pagina) {
+        case 'registrarMedico':
+            window.location.href = 'registroMedico.html';
+            break;
+        case 'registrarEnfermero':
+            window.location.href = 'registroEnfermero.html';
+            break;
+        case 'registrarPaciente':
+            window.location.href = 'registroPaciente.html';
+            break;
+        case 'panelAdministrador':
+            window.location.href = 'mostrarDatos.html';
+            break;
+            case 'pedirCita':
+            window.location.href = 'pedirCita.html';
+            break;
+            case 'datosPaciente':
+            window.location.href = 'datosPaciente.html';
+            break;
+        default:
+            break;
     }
 }
