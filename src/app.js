@@ -1,9 +1,7 @@
-// Función para obtener el hash de los nodos activos
 let miContrato;
 let web3MetaMask;
 let accounts;
-const contractAddress = '0x25E0c625745360848C34ba3F942BAC1FCd0a8f41';
-
+const contractAddress = '0x0Ef5Da3590c64aC552C35Fa565F3f750Ad87D6dD';
 
 function actualizaReloj() {
     const currentTime = new Date();
@@ -12,7 +10,7 @@ function actualizaReloj() {
     const formattedTime = `${hours}:${minutes}`;
     document.getElementById('clock-time').textContent = formattedTime; // Actualiza la hora en el contenedor
     // Actualiza el reloj cada segundo
-    setInterval(actualizaReloj, 1000);
+    setInterval(actualizaReloj, 10000);
 }
 
 async function connectMetamask() {
@@ -35,9 +33,10 @@ async function connectMetamask() {
     }
 }
 
-async function mostrarDatos() {
+async function mostrarDatosPacienteAdmin() {
     try {
         const dniPaciente = document.getElementById('dniPaciente').value;
+        
         // Obtener datos del paciente
         const paciente = await miContrato.methods.obtenerDatosPaciente(dniPaciente).call({ from: accounts[0] });
         const datosPacienteContainer = document.getElementById('datosPacienteContainer');
@@ -45,34 +44,58 @@ async function mostrarDatos() {
         if (!paciente.datos.DNI) {
             datosPacienteContainer.innerHTML = '';
         } else {
-            datosPacienteContainer.innerHTML = `<p><strong>DNI:</strong> ${paciente.datos.DNI}</p>
-                <p><strong>Centro Sanitario:</strong> ${paciente.centro_sanitario}</p>
-                <p><strong>Médico Asignado:</strong> ${paciente.medico_asignado}</p>`;
+            datosPacienteContainer.innerHTML +=`<p class="text-left"><strong>DNI:</strong> ${dniPaciente}</p>`;
+            datosPacienteContainer.innerHTML += `<p class="text-left"><strong>Centro Sanitario:</strong> ${paciente.centro_sanitario}</p>`;
+            datosPacienteContainer.innerHTML += `<p class="text-left"><strong>Indice Médico Asignado:</strong> ${paciente.medico_asignado}</p>`;
+            // Separar los datos del paciente utilizando el separador ':'
+            const datosSeparados = paciente.datos_paciente.split(':');
+            // Crear un array con los nombres de los campos
+            const campos = ['Nombre Completo', 'Dirección', 'Nacionalidad', 'Fecha de Nacimiento', 'Alergias', 'Grupo Sanguíneo', 'Peso (kg)', 'Altura (cm)', 'Vacunas'];
+            // Mostrar los datos en el contenedor
+            for (let i = 0; i < campos.length; i++) {
+                datosPacienteContainer.innerHTML += `<p class="text-left"><strong>${campos[i]}:</strong> ${datosSeparados[i]}</p>`;
+            }
         }
-
-        // Obtener datos de médicos
-        const medicos = await miContrato.methods.obtenerMedicos().call({ from: accounts[0] });
-        const listaMedicos = document.getElementById('listaMedicos');
-        listaMedicos.innerHTML = '';
-        medicos.forEach(medico => {
-            const li = document.createElement('li');
-            li.innerHTML = `<strong>DNI:</strong> ${medico.datos.DNI}, <strong>Especialidad:</strong> ${medico.especialidad}, <strong>Centro Sanitario:</strong> ${medico.centro_sanitario}`;
-            listaMedicos.appendChild(li);
-        });
-
-        // Obtener datos de enfermeros
-        const enfermeros = await miContrato.methods.obtenerEnfermeros().call({ from: accounts[0] });
-        const listaEnfermeros = document.getElementById('listaEnfermeros');
-        listaEnfermeros.innerHTML = '';
-        enfermeros.forEach(enfermero => {
-            const li = document.createElement('li');
-            li.innerHTML = `<strong>DNI:</strong> ${enfermero.datos.DNI}, <strong>Especialidad:</strong> ${enfermero.especialidad}, <strong>Centro Sanitario:</strong> ${enfermero.centro_sanitario}`;
-            listaEnfermeros.appendChild(li);
-        });
     } catch (error) {
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
     }
 }
+
+async function mostrarDatosPaciente() {
+    try {
+        const dniPaciente = document.getElementById('dniPaciente').value;
+        
+        // Obtener datos del paciente
+        const paciente = await miContrato.methods.obtenerDatosPaciente(dniPaciente).call({ from: accounts[0] });
+        const datosPacienteContainer = document.getElementById('datosPacienteContainer');
+        datosPacienteContainer.innerHTML = '';
+        if (!paciente.datos.DNI) {
+            datosPacienteContainer.innerHTML = 'Debes introducir un DNI válido';
+        } else {
+            datosPacienteContainer.innerHTML += `<p class="text-left"><strong>DNI:</strong> ${dniPaciente}</p>`;
+            datosPacienteContainer.innerHTML += `<p class="text-left"><strong>Centro Sanitario:</strong> ${paciente.centro_sanitario}</p>`;
+            // Separar los datos del paciente utilizando el separador ':'
+            const datosSeparados = paciente.datos_paciente.split(':');
+            // Crear un array con los nombres de los campos
+            const campos = ['Nombre Completo', 'Dirección', 'Nacionalidad', 'Fecha de Nacimiento', 'Alergias', 'Grupo Sanguíneo',  'Peso (kg)', 'Altura (cm)', 'Vacunas'];
+            // Mostrar los datos en el contenedor
+            for (let i = 0; i < campos.length; i++) {
+                datosPacienteContainer.innerHTML += `<p class="text-left"><strong>${campos[i]}:</strong> ${datosSeparados[i]}</p>`;
+            }
+        }
+    } catch (error) {
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
+    }
+}
+
 
 async function registrarEnfermero() {
     try {
@@ -83,11 +106,17 @@ async function registrarEnfermero() {
 
         await miContrato.methods.registrarEnfermero(direccionEnfermero, dniEnfermero, especialidadEnfermero, centroSanitarioEnfermero).send({ from: accounts[0] });
         alert('Enfermero con DNI ' + dniEnfermero + ' registrado exitosamente.');
+        window.location.href = 'index.html';
 
     } catch (error) {
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
     }
 }
+
 
 async function registrarMedico() {
     try {
@@ -98,13 +127,17 @@ async function registrarMedico() {
 
         await miContrato.methods.registrarMedico(direccionMedico, dniMedico, especialidadMedico, centroSanitarioMedico).send({ from: accounts[0] });
 
-        alert('Médico con DNI' + dniMedico+ + ' registrado exitosamente.');
-    }
-    catch (error) {
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        alert('Médico con DNI ' + dniMedico + ' registrado exitosamente.');
+        window.location.href = 'index.html';
+
+    } catch (error) {
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
     }
 }
-
 async function registrarPaciente() {
     try {
         const dniPaciente = document.getElementById('dniPaciente').value;
@@ -122,51 +155,53 @@ async function registrarPaciente() {
             document.getElementById('altura').value,
             document.getElementById('vacunas').value
         ].join(':');
-        let paciente = await miContrato.methods.registrarPaciente(dniPaciente, centroSanitarioPaciente, datosPaciente).send({ from: accounts[0] });
+        await miContrato.methods.registrarPaciente(dniPaciente, centroSanitarioPaciente, datosPaciente).send({ from: accounts[0] });
         alert('Paciente con DNI ' + dniPaciente + ' registrado exitosamente.');
+        window.location.href = 'index.html';
     } catch (error) {
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
     }
 }
 
 async function solicitarCita() {
     try {
-        // Obtén los valores del formulario
         const fechaCita = document.getElementById('fechaCita').value;
         const horaCita = document.getElementById('horaCita').value;
         const datosConsulta = document.getElementById('datosConsulta').value;
         const tipoConsulta = document.getElementById('tipoConsulta').value;
         const dniPaciente = document.getElementById('dniPaciente').value;
+
+        // Validar que la fecha de la cita no sea anterior a hoy
+        const today = new Date().toISOString().split('T')[0];
+        if (fechaCita < today) {
+            alert('La fecha de la cita no puede ser anterior a hoy.');
+            return;
+        }
+
+        // Continuar con la solicitud de la cita
         let result = await miContrato.methods.solicitarCita(
-            dniPaciente, 
+            dniPaciente,
             Date.parse(fechaCita + ' ' + horaCita) / 1000, // Convierte la fecha y hora a un timestamp Unix
             parseInt(horaCita), // Convierte la hora a un entero
             datosConsulta,
             tipoConsulta
         ).send({ from: accounts[0] });
-
         console.log(result);
         alert('Cita solicitada exitosamente.');
+        window.location.href = 'index.html';
     } catch (error) {
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
     }
 }
-async function obtenerCitasPorPaciente() {
-    try {
-        const dniPaciente = document.getElementById('dniPaciente').value;
-        let citas = await miContrato.obtenerCitas(dniPaciente).call({ from: accounts[0] });
-        var listaCitas = document.getElementById("listaCitas");
-        listaCitas.innerHTML = ""; // Limpiamos la lista
-        citas.forEach(function (cita) {
-            var listItem = document.createElement("li");
-            listItem.className = "list-group-item";
-            listItem.innerHTML = `<strong>Fecha:</strong> ${cita.fecha}, <strong>Hora:</strong> ${cita.hora}, <strong>Motivo:</strong> ${cita.motivo}`;
-            listaCitas.appendChild(listItem);
-        });
-    } catch (error) {
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
-    }
-}
+
 async function atenderConsulta() {
     try {
         const dniPacienteAtender = document.getElementById('dniPacienteAtender').value;
@@ -178,7 +213,6 @@ async function atenderConsulta() {
         const medicacionPropuesta = document.getElementById('medicacionPropuesta').value;
         const tiempoEntreTomas = document.getElementById('tiempoEntreTomas').value;
         const dosis = document.getElementById('dosis').value;
-
         const datosConsultaAtender = `${motivoConsulta}:${examenesRealizados}:${problemaSalud}:${medicacionPropuesta}:${tiempoEntreTomas}:${dosis}`;
         const result = await miContrato.methods.atenderConsulta(
             dniPacienteAtender,
@@ -189,8 +223,134 @@ async function atenderConsulta() {
 
         console.log(result);
         alert('Consulta atendida exitosamente.');
+        window.location.href = 'index.html';
     } catch (error) {
-        document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
+    }
+}
+
+function timestampAFecha(timestamp) {
+    const fecha = new Date(timestamp * 1000); // Multiplicar por 1000 si el timestamp está en segundos
+    return fecha.toLocaleDateString() + ' ' + fecha.toLocaleTimeString();
+}
+
+async function mostrarCitas() {
+    try {
+        const dniPaciente = document.getElementById('dniPaciente').value;
+        const citas = await miContrato.methods.obtenerCitas().call({ from: accounts[0] });
+        console.log(citas);
+        const listaCitas = document.getElementById('listaCitasConsultas');
+        listaCitas.innerHTML = '';
+
+        // Obtiene la fecha actual
+        const fechaActual = new Date().getTime() / 1000; // Convierte a segundos
+
+        citas.forEach(cita => {
+            if (cita.paciente.datos.direccionPublica.toLowerCase() == accounts[0] && cita.fecha > fechaActual) {
+                const li = document.createElement('li');
+                li.classList.add('lista-item');
+                const fechaFormateada = timestampAFecha(cita.fecha);
+                const tipoTexto = obtenerTextoTipoConsulta(cita.tipoConsulta);
+                li.innerHTML = `<strong>Fecha:</strong>${fechaFormateada}<br><strong>Tipo:</strong>${tipoTexto}<br><strong>Motivo:</strong>${cita.datos_cita}`;
+                listaCitas.appendChild(li);
+            }
+        });
+    } catch (error) {
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
+    }
+}
+
+async function mostrarConsultas() {
+    try {
+        const dniPaciente = document.getElementById('dniPaciente').value;
+        const consultas = await miContrato.methods.obtenerConsultas().call({ from: accounts[0] });
+        const listaConsultas = document.getElementById('listaConsultas');
+        listaConsultas.innerHTML = '';
+        consultas.forEach(consulta => {
+            if (consulta.paciente.datos.direccionPublica.toLowerCase() == accounts[0]) {
+                const li = document.createElement('li');
+                li.classList.add('lista-item');
+                const fechaFormateada = timestampAFecha(consulta.fecha);
+                const estadoTexto = obtenerTextoEstadoConsulta(consulta.estado);
+                const tipoTexto = obtenerTextoTipoConsulta(consulta.tipo);
+                li.innerHTML = ''; 
+                li.innerHTML += `<strong>Fecha:</strong> ${fechaFormateada}<br><strong>Estado:</strong>${estadoTexto}<br><strong>Tipo:</strong> ${tipoTexto}`;
+                const datosConsultaArray = consulta.datos_consulta.split(':');
+                const motivoConsulta = datosConsultaArray[0];
+                const examenesRealizados = datosConsultaArray[1];
+                const problemaSalud = datosConsultaArray[2];
+                const medicacionPropuesta = datosConsultaArray[3];
+                const tiempoEntreTomas = datosConsultaArray[4];
+                const dosis = datosConsultaArray[5];
+                li.innerHTML += `<br><strong>Motivo:</strong> ${motivoConsulta}<br>
+                    <strong>Examenes realizados:</strong> ${examenesRealizados}<br>
+                    <strong>Problema de salud:</strong> ${problemaSalud}<br>
+                    <strong>Medicación propuesta:</strong> ${medicacionPropuesta}<br>
+                    <strong>Tiempo entre tomas:</strong> ${tiempoEntreTomas}<br>
+                    <strong>Dosis:</strong> ${dosis}
+                `;
+                listaConsultas.appendChild(li);            
+        }});
+    } catch (error) {
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
+    }
+}
+
+async function comprobarConsultasProgramadas () {
+    try {
+        const consultasProgramadas = await miContrato.methods.obtenerConsultas().call({ from: accounts[0] });
+        const listaConsultasProgramadas = document.getElementById('listaConsultasProgramadas');
+        console.log(consultasProgramadas);
+        listaConsultasProgramadas.innerHTML = '';
+        consultasProgramadas.forEach(consulta => {
+            if (consulta.medico.datos.direccionPublica.toLowerCase() === accounts[0].toLowerCase()) {
+                console.log(consulta);
+                const li = document.createElement('li');
+                li.classList.add('lista-item');
+                const fechaFormateada = timestampAFecha(consulta.fecha);
+                const tipoTexto = obtenerTextoTipoConsulta(consulta.tipo);
+                li.innerHTML = `<strong>Paciente:</strong>${consulta.paciente.datos.DNI}<br><strong>Fecha:</strong>${fechaFormateada}<br><strong>Tipo:</strong>${tipoTexto}<br>`;
+                listaConsultasProgramadas.appendChild(li);
+            }
+        });
+    } catch (error) {
+        if (error.message.includes("Transaction has been reverted by the EVM")) {
+            window.location.href = 'noAutorizado.html';
+        } else {
+            document.getElementById('transactionResult').textContent = 'Error en la transacción: ' + error.message;
+        }
+    }
+}
+
+
+function obtenerTextoTipoConsulta(tipo) {
+    switch (tipo) {
+        case '0':
+            return "Consulta general";
+        case '1':
+            return "Consulta especializada";
+    }
+}
+function obtenerTextoEstadoConsulta(estado) {
+    switch (estado) {
+        case '0':
+            return "Programada";
+        case '1':
+            return "Cancelada";
+        case '2':
+            return "Cerrada";
     }
 }
 
@@ -222,16 +382,16 @@ function redirigirPagina(pagina) {
         case 'panelAdministrador':
             window.location.href = 'mostrarDatos.html';
             break;
-            case 'pedirCita':
+        case 'pedirCita':
             window.location.href = 'pedirCita.html';
             break;
-            case 'atenderConsulta':
+        case 'atenderConsulta':
             window.location.href = 'atenderConsulta.html';
             break;
-            case 'datosPaciente':
+        case 'datosPaciente':
             window.location.href = 'datosPaciente.html';
             break;
-            case 'mostrarDatos':
+        case 'mostrarDatos':
             window.location.href = 'mostrarDatos.html';
             break;
         default:

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Historia Clínica App - Citas del Paciente</title>
+    <title>Solicitar Cita - Historia Clínica App</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Fuente de Google Fonts -->
@@ -26,7 +26,7 @@
                 </span>
                 <span id="current-time">
                     <img id="clock-icon" src="../src/images/reloj.png" alt="Reloj" height="20px">
-                    <span id="clock-time"></span>
+                    <span id="clock-time"></span> <!-- Contenedor para la hora -->
                 </span>
             </h1>
         </div>
@@ -61,38 +61,22 @@
                 </ul>
             </div>
         </div>
-
-            <div class="card-body">
-                <form id="obtenerDatosPacienteForm">
-                    <h2>Obtener Datos del Paciente</h2>
-                    <div class="form-group">
-                        <label for="dniPaciente">Introduce tu DNI:</label>
-                        <input type="text" class="form-control" id="dniPaciente" required> <br> <button type="button"
-                            class="btn btn-primary"
-                            onclick="mostrarDatosPaciente();mostrarConsultas();mostrarCitas();">Cargar mis Datos</button>
-
+        <div class="container">
+            <div class="form-container">
+                <div class="form-group">
+                    <br>
+                    <div class="container">
+                        <h1 class="text-center">Consultas Programadas</h1>
+                        <ul id="listaConsultasProgramadas" class="lista"></ul>
                     </div>
-                    <div id="datosPacienteContainer"></div>
-                    <ul id="listaCitas" class="list-group mt-4"></ul>
-                </form>
-            </div>
-            <div class="mt-4">
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h2>Próximas Citas</h2>
-                        <ul id="listaCitasConsultas"></ul>
-                    </div>
-                </div>
-            <div class="mt-4">
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h2>Historial Médico de Consultas</h2>
-                        <ul id="listaConsultas"></ul>
-                    </div>
-                </div>
-                </div>
                     <div id="transactionResultContainer">
-                        <p id="transactionResult"></p>
+                        <p id="transactionResult"></p> <button type="button" class="btn btn-primary"
+                            onclick="comprobarConsultasProgramadas()">Comprobar
                     </div>
-                </div>
-            <script src="app.js"></script>
+                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+                    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+                    <script src="app.js"></script>
+</body>
+
+</html>

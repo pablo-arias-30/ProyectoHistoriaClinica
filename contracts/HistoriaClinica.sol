@@ -13,14 +13,9 @@ contract HistoriaClinica {
     constructor() {
         owner = msg.sender; // el primer usuario en crear el contrato se convierte en el owner o admin
     }
-
     enum tipo_consulta {
         urgencias,
         especialidad
-    }
-    enum tipo_organizacion {
-        publica,
-        privada
     }
     enum estado_consulta {
         programada,cancelada,cerrada
@@ -34,7 +29,7 @@ contract HistoriaClinica {
     struct Paciente {
         Persona datos;
         string centro_sanitario;
-        uint medico_asignado;
+        uint64 medico_asignado;
         string datos_paciente;
     }
 
@@ -42,7 +37,7 @@ contract HistoriaClinica {
         Persona datos; //Herencia
         string especialidad;
         string centro_sanitario;
-        uint numero_pacientes;
+        uint64 numero_pacientes;
     }
 
     struct Enfermero {
@@ -83,13 +78,12 @@ function registrarPaciente(string memory _DNI, string memory _centroSanitario, s
 pacientes[_DNI] = Paciente({
     centro_sanitario: _centroSanitario,
     datos: datosPersonales,
-    medico_asignado: type(uint256).max, //aún no tiene médico asignado
+    medico_asignado: type(uint64).max, //aún no tiene médico asignado
     datos_paciente: _datosPaciente
 });
 asignarMedico(_DNI);
 
 }
-
     function registrarMedico(address _direccionMedico, string memory _DNI, string memory _especialidad, string memory _centro_sanitario) public soloAdmin() {
         Persona memory datosPersonales = Persona(_direccionMedico,_DNI);
         medicos.push(Medico({
@@ -110,14 +104,14 @@ asignarMedico(_DNI);
 
     }
 
-    function asignarMedico(string memory _DNI) public returns (uint) {
+    function asignarMedico(string memory _DNI) public returns (uint64) {
         // Comprobamos si hay médicos disponibles
          require(medicos.length > 0, "No hay medicos disponibles");
-        uint i = 0;
+        uint64 i = 0;
         Paciente memory p = pacientes[_DNI]; //Buscamos el indice del paciente por DNI
         string memory nombreCentroSanitario = p.centro_sanitario; // Obtenemos centro sanitario del paciente
-        uint indiceMedicoConMenosPacientes; //Posicion del array del medico con menos pacientes
-        uint256 minimoPacientes = type(uint256).max;
+        uint64 indiceMedicoConMenosPacientes; //Posicion del array del medico con menos pacientes
+        uint64 minimoPacientes = type(uint64).max;
         while (i < medicos.length) {
             //Comprobamos especialidad, centro sanitario, y obtenemos el médico con menos pacientes asignados
             if (
@@ -132,20 +126,24 @@ asignarMedico(_DNI);
             }
             i++;
         }
+        require(
+        keccak256(bytes(medicos[indiceMedicoConMenosPacientes].centro_sanitario)) == 
+        keccak256(bytes(nombreCentroSanitario)),
+        "El medico no pertenece al mismo centro sanitario que el paciente"
+    );
         medicos[indiceMedicoConMenosPacientes].numero_pacientes++; //Aumentamos pacientes de ese médico
         pacientes[_DNI].medico_asignado=indiceMedicoConMenosPacientes; //Asignamos médico al paciente
         return indiceMedicoConMenosPacientes;
     }
 
     function solicitarCita(string memory _DNI, uint256 _fecha, uint8 _hora, string memory _datos_cita, tipo_consulta _tipoConsulta) public {
-    require(pacientes[_DNI].medico_asignado < type(uint256).max, "El paciente no tiene un medico asignado");
-    require(_hora >= 8 && _hora <= 18, "La clinica solo atiende entre las 8:00 y las 18:00.");
+    require(pacientes[_DNI].medico_asignado < type(uint64).max, "El paciente no tiene un medico asignado");
     require(_fecha >= block.timestamp, "No se pueden programar citas anteriores a este momento.");
 
     bool huecoLibre = true;
     Paciente memory paciente = pacientes[_DNI];
     Medico memory medico = medicos[paciente.medico_asignado]; //Medico que el paciente tiene asignado
-    for (uint i = 0; i < citas.length && citas[i].fecha>block.timestamp; i++) { 
+    for (uint64 i = 0; i < citas.length && citas[i].fecha>block.timestamp; i++) { 
         //Comprobamos que sea el medico que tiene asignado el paciente 
         if(citas[i].medico.datos.direccionPublica == medico.datos.direccionPublica){ 
         //Comprobamos que haya un rango de 15 minutos disponibles despues de la cita
@@ -177,17 +175,13 @@ asignarMedico(_DNI);
         estado: estado_consulta.programada,
         tipo: _tipoConsulta
     }));
-
-    } else {
-        revert("No hay hueco libre para la cita en el horario solicitado para el paciente sugerido.");
-    }
-
 }
-function atenderConsulta (string memory _DNI, uint _fecha, uint _hora, string memory _datos_consulta) public {
+    }
+function atenderConsulta (string memory _DNI, uint _fecha, uint8 _hora, string memory _datos_consulta) public {
     Paciente memory paciente = pacientes[_DNI];
     require(msg.sender ==  medicos[pacientes[_DNI].medico_asignado].datos.direccionPublica, "Solo el medico puede atender la consulta"); 
     bool consultaEncontrada = false;
-    for(uint i = 0; i < consultas.length; i++) {
+    for(uint64 i = 0; i < consultas.length; i++) {
         if(consultas[i].fecha == _fecha && consultas[i].hora == _hora && keccak256(bytes(paciente.datos.DNI)) == keccak256(bytes(_DNI))) {
             consultaEncontrada = true;
             consultas[i].datos_consulta = _datos_consulta;
@@ -197,12 +191,11 @@ function atenderConsulta (string memory _DNI, uint _fecha, uint _hora, string me
     require(consultaEncontrada == true, "No se encontro una consulta programada con los datos especificados");
 }
 
-function modificarCita(uint8 indice, Medico memory _medico, string memory _datos_cita, Paciente memory _paciente, uint _nuevaFecha, uint8 _nuevaHora, tipo_consulta _nuevoTipoConsulta) public {
-    require((indice < citas.length) && (msg.sender == _medico.datos.direccionPublica || msg.sender == _paciente.datos.direccionPublica), "la cita no existe o no hay permisos suficientes");
-    require(_nuevaHora >= 8 && _nuevaHora <= 18, "La clinica solo atiende entre las 8:00 y las 18:00.");
+function modificarCita(uint64 indice, string memory _datos_cita, Paciente memory _paciente, uint _nuevaFecha, uint8 _nuevaHora, tipo_consulta _nuevoTipoConsulta) public {
+    require((indice < citas.length) && (msg.sender == medicos[_paciente.medico_asignado].datos.direccionPublica || msg.sender == _paciente.datos.direccionPublica), "la cita no existe o no hay permisos suficientes");
     require(_nuevaFecha >= block.timestamp, "No se pueden programar citas anteriores a este momento.");
     //Actualizamos datos de la futura consulta médica
-     for (uint i = 0; i < consultas.length; i++) {
+     for (uint64 i = 0; i < consultas.length; i++) {
         if (consultas[i].fecha == citas[indice].fecha &&
             consultas[i].hora == citas[indice].hora &&
             keccak256(bytes(consultas[i].paciente.datos.DNI)) == keccak256(bytes(_paciente.datos.DNI))) {
@@ -217,22 +210,13 @@ function modificarCita(uint8 indice, Medico memory _medico, string memory _datos
     citas[indice].datos_cita=_datos_cita;
     citas[indice].tipoConsulta = _nuevoTipoConsulta;
 }
-//Medico crea consulta (especialidad o no)
-function crearConsulta(Consulta memory nuevaConsulta) public {
-    consultas.push(nuevaConsulta);
-}
-
-function obtenerMedicos() public view soloAdmin returns (Medico[] memory) {
-        return medicos;
+function obtenerCitas() public view returns (Cita[] memory) {
+        return citas;
     }
-    function obtenerEnfermeros() public view soloAdmin returns (Enfermero[] memory) {
-        return enfermeros;
+    function obtenerConsultas() public view returns (Consulta[] memory) {
+        return consultas;
     }
 function obtenerDatosPaciente(string memory _DNI) public view returns (Paciente memory) {
-        require(
-        msg.sender == owner || msg.sender == pacientes[_DNI].datos.direccionPublica || msg.sender == medicos[pacientes[_DNI].medico_asignado].datos.direccionPublica,
-        "Solo el administrador, el medico asignado o el propio paciente pueden obtener estos datos"
-    );
     return pacientes[_DNI];
 }
 }

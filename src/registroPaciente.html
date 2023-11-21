@@ -33,7 +33,7 @@
 
         <div class="menu-container">
     <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">
-        <i class="fas fa-user-md"></i> Médico
+        <i class="fas fa-user-md"></i> Personal Sanitario
         <ul class="submenu" id="medico-submenu">
             <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
             <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
@@ -106,9 +106,9 @@
                     <label for="Vacunas administradas">Vacunas Administradas:</label>
                     <input type="text" class="form-control" id="vacunas" required>
                 </div>
-                <button type="button" class="btn btn-primary" onclick="registrarPaciente()">Registrar Paciente</button>
                 <div id="transactionResultContainer">
                     <p id="transactionResult"></p>
+                    <button type="button" class="btn btn-primary" onclick="registrarPaciente()">Registrar Paciente</button>
                 </div>
             </form>
         </div>

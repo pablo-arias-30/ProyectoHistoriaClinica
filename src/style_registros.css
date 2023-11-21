@@ -205,18 +205,45 @@
         padding: 12px;
         border-radius: 5px;
         transition: background-color 0.3s;
-        width: 200px; /* Ancho ajustado */
+        width: 200px; 
         white-space: nowrap;
-        font-size: 16px; /* Tamaño de fuente ajustado */
+        font-size: 16px; 
     }
     
     .submenu-item:hover {
         background-color: #555;
         color: #fff;
         cursor: pointer;
-        min-width: 200px; /* Ancho mínimo para coincidir visualmente */
+        min-width: 200px;
+    }
+    .lista-item {
+        list-style: none;
+        margin: 10px 0;
+        padding: 15px;
+        border: 1px solid #2693dc;
+        border-radius: 8px;
+        background-color: #d1e4f0;
+        text-align: left; 
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+        transition: background-color 0.3s ease;
+        justify-content: space-between; 
+        align-items: center;
     }
     
+    .lista-item:hover {
+        background-color: #e0e0e0;
+    }
     
+    .lista-item strong {
+        margin-right: 10px;
+        font-size: 16px;
+        color: #333;
+    }
+    
+    #listaCitasConsultas,
+    #listaConsultas {
+        padding: 0;
+    }
+
     
     

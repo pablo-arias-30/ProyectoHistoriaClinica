@@ -33,7 +33,7 @@
 
         <div class="menu-container">
     <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">
-        <i class="fas fa-user-md"></i> Médico
+        <i class="fas fa-user-md"></i> Personal Sanitario
         <ul class="submenu" id="medico-submenu">
             <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
             <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
@@ -58,12 +58,6 @@
         </ul>
     </div>
 </div>
-        
-        
-        
-        
-        
-
         <div class="form-container">
             <div class="card-body">
                 <form id="obtenerDatosPacienteForm">
@@ -75,26 +69,11 @@
                     <div id="datosPacienteContainer"></div>
                 </form>
             </div>
-            <div class="mt-4">
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h2>Lista de Médicos</h2>
-                        <ul id="listaMedicos"></ul>
-                    </div>
-                </div>
-
-                <div class="card mt-4">
-                    <div class="card-body">
-                        <h2>Lista de Enfermeros</h2>
-                        <ul id="listaEnfermeros"></ul>
-                    </div>
-                </div>
-            </div>
             <div id="transactionResultContainer">
                 <p id="transactionResult"></p>
             </div>
             </form>
-            <button type="button" class="btn btn-primary" onclick="mostrarDatos()">Cargar Datos</button>
+            <button type="button" class="btn btn-primary" onclick="mostrarDatosPacienteAdmin()">Cargar Datos</button>
         </div>
     </div>
     <script src="app.js"></script>
