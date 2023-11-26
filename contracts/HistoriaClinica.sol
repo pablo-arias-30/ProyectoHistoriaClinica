@@ -68,10 +68,10 @@ contract HistoriaClinica {
         require(msg.sender == owner, "Solo el administrador tiene permisos para ejecutar esta funcion");
         _;
     }
-function registrarPaciente(string memory _DNI, string memory _centroSanitario, string memory _datosPaciente) public {
+function registrarPaciente(string memory _DNI, string memory _centroSanitario, string memory _datosPaciente, address _direccionPaciente) public {
     require(pacientes[_DNI].datos.direccionPublica == address(0), "Este paciente ya esta registrado");
     Persona memory datosPersonales = Persona({
-    direccionPublica: msg.sender,
+    direccionPublica: _direccionPaciente,
     DNI: _DNI
 });
 

@@ -245,5 +245,22 @@
         padding: 0;
     }
 
+    .boton-modificar-cita {
+        margin-top: 5px; 
+        padding: 5px 10px;
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.2s;
+    }
+    
+    .boton-modificar-cita:hover {
+        background-color: #0056b3;
+        transform: scale(1.05);
+    }
+    
+
     
     

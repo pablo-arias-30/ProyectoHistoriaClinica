@@ -4,12 +4,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Solicitar Cita - Historia Clínica App</title>
+    <title>Modificar Cita - Historia Clínica App</title>
     <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!-- Fuente de Google Fonts -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap">
-    <!-- Icono de reloj -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style_registros.css">
@@ -26,14 +24,13 @@
                 </span>
                 <span id="current-time">
                     <img id="clock-icon" src="../src/images/reloj.png" alt="Reloj" height="20px">
-                    <span id="clock-time"></span> <!-- Contenedor para la hora -->
+                    <span id="clock-time"></span>
                 </span>
             </h1>
         </div>
 
         <div class="menu-container">
-            <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')"
-                onmouseout="ocultarSubMenu('medico')">
+            <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">
                 <i class="fas fa-user-md"></i> Personal Sanitario
                 <ul class="submenu" id="medico-submenu">
                     <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
@@ -41,8 +38,7 @@
                 </ul>
             </div>
 
-            <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')"
-                onmouseout="ocultarSubMenu('paciente')">
+            <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')" onmouseout="ocultarSubMenu('paciente')">
                 <i class="fas fa-user"></i> Paciente
                 <ul class="submenu" id="paciente-submenu">
                     <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</li>
@@ -50,8 +46,7 @@
                 </ul>
             </div>
 
-            <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')"
-                onmouseout="ocultarSubMenu('admin')">
+            <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')" onmouseout="ocultarSubMenu('admin')">
                 <i class="fas fa-cogs"></i> Administrador
                 <ul class="submenu" id="admin-submenu">
                     <li class="submenu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</li>
@@ -61,22 +56,45 @@
                 </ul>
             </div>
         </div>
+
         <div class="container">
+            <h1 class="text-center">Modificar Cita</h1>
+
             <div class="form-container">
-                <div class="form-group">
-                    <br>
-                    <div class="container">
-                        <h1 class="text-center">Consultas Programadas</h1>
-                        <ul id="listaConsultasProgramadas" class="lista"></ul>
+                <form id="modificarCitaForm">
+                    <div class="form-group">
+                        <label for="nuevaFecha">Nueva Fecha de la Cita:</label>
+                        <input type="date" class="form-control" id="nuevaFecha" required>
                     </div>
+                    <div class="form-group">
+                        <label for="nuevaHora">Nueva Hora de la Cita:</label>
+                        <input type="time" class="form-control" id="nuevaHora" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="motivoCita">Nuevo Motivo de la Cita:</label>
+                        <textarea class="form-control" id="motivoCita" rows="4" required></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="nuevoTipoConsulta">Nuevo Tipo de Consulta:</label>
+                        <select class="form-control" id="nuevoTipoConsulta" required>
+                            <option value="0">Consulta general</option>
+                            <option value="1">Consulta especializada</option>
+                        </select>
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="modificarCita()">Guardar Cambios</button>
                     <div id="transactionResultContainer">
-                        <p id="transactionResult"></p> <button type="button" class="btn btn-primary"
-                            onclick="comprobarConsultasProgramadas()">Cargar mis Consultas
+                        <p id="transactionResult"></p>
                     </div>
-                    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
-                    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
-                    <script src="app.js"></script>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.6.0/dist/web3.min.js"></script>
+    <script src="app.js"></script>
 </body>
 
 </html>

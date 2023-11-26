@@ -15,7 +15,7 @@
     <link rel="stylesheet" href="style_registros.css">
 </head>
 
-<body onload="connectMetamask(); actualizaReloj();">
+<body onload="connectMetamask(); actualizaReloj(); detallesConsulta();">
     <div class="container">
         <div class="header">
             <h1>
@@ -26,7 +26,7 @@
                 </span>
                 <span id="current-time">
                     <img id="clock-icon" src="../src/images/reloj.png" alt="Reloj" height="20px">
-                    <span id="clock-time"></span> <!-- Contenedor para la hora -->
+                    <span id="clock-time"></span>
                 </span>
             </h1>
         </div>
@@ -61,26 +61,14 @@
     <div class="container">
             <h1 class="text-center">Atender Consulta</h1>
             <div class="form-container">
+                <div id="datosPacienteContainer"></div>
                 <form id="atenderConsultaForm">
                     <div class="form-group">
-                        <label for="dniPacienteAtender">Introduzca DNI del Paciente:</label>
-                        <input type="text" class="form-control" id="dniPacienteAtender" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="fechaConsulta">Fecha de la Consulta:</label>
-                        <input type="date" class="form-control" id="fechaConsulta" required>
-                    </div>
-                    <div class="form-group">
-                        <label for="horaConsulta">Hora de la Consulta:</label>
-                        <input type="time" class="form-control" id="horaConsulta" required>
-                    </div>
-                    <!-- Agregar más campos según sea necesario -->
-                    <div class="form-group">
-                        <label for="motivoConsulta">Motivo de la Consulta:</label>
+                        <label for="motivoConsulta">Motivo de consulta:</label>
                         <input type="text" class="form-control" id="motivoConsulta">
                     </div>
                     <div class="form-group">
-                        <label for="examenesRealizados">Exámenes Realizados:</label>
+                        <label for="examenesRealizados">Exámenes realizados:</label>
                         <input type="text" class="form-control" id="examenesRealizados">
                     </div>
                     <div class="form-group">
