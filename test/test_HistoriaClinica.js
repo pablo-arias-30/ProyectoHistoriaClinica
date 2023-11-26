@@ -102,7 +102,7 @@ contract('HistoriaClinica', (accounts) => {
     await historiaClinica.registrarMedico(accounts[2], '111111111', 'General', centroSanitario, { from: accounts[0] });
     await historiaClinica.registrarPaciente(DNI_Paciente, centroSanitario, datosPaciente, accounts[1], { from: accounts[0] });
 
-    await historiaClinica.solicitarCita(DNI_Paciente, fecha, hora, 'Consulta de rutina', 0, { from: accounts[1] });
+    await historiaClinica.solicitarCita(DNI_Paciente, fecha, hora, 'Consulta de rutina', 0, { from: pacienteAddress });
 
     const citaAntes = await historiaClinica.citas(0);
 
