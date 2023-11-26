@@ -69,6 +69,11 @@ module.exports = {
       port: 22000,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
      },
+     testnet: {
+      host: "127.0.0.1",
+      port: 7545,       
+      network_id: "5777", 
+    },
     //
     // An additional network, but with some advanced options…
     // advanced: {
@@ -117,6 +122,7 @@ module.exports = {
        }
     }
   },
+  
 
   // Truffle DB is currently disabled by default; to enable it, change enabled:
   // false to enabled: true. The default storage location can also be
