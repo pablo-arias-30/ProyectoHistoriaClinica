@@ -8,8 +8,8 @@ function actualizaReloj() {
     let hours = currentTime.getHours().toString().padStart(2, '0'); // Agrega cero a la izquierda si es necesario
     let minutes = currentTime.getMinutes().toString().padStart(2, '0'); // Agrega cero a la izquierda si es necesario
     let formattedTime = `${hours}:${minutes}`;
-    document.getElementById('clock-time').textContent = formattedTime; // Actualiza la hora en el contenedor
-    // Actualiza el reloj cada segundo
+    document.getElementById('clock-time').textContent = formattedTime; // Actualiza la hora
+    // Actualiza el reloj cada 10 segundos
     setInterval(actualizaReloj, 10000);
 }
 
