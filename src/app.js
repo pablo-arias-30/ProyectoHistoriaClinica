@@ -1,7 +1,7 @@
 let miContrato;
 let web3MetaMask;
 let accounts;
-let contractAddress = '0x4eA08aD57F9470631e517038756439A87c70a3c4';
+let contractAddress = '0xf14FC09E131047e499EE6382340a3C8ef35E13F9'; //dirección del contrato
 
 function actualizaReloj() {
     let currentTime = new Date();
@@ -20,15 +20,19 @@ async function connectMetamask() {
             await window.ethereum.enable();
             web3MetaMask = new Web3(window.ethereum);
             accounts = await window.ethereum.request({ method: 'eth_accounts' });
+            console.log('Connected to MetaMask. Accounts:', accounts);
             const response = await fetch('../build/contracts/HistoriaClinica.json');
             const Codabi = await response.json();
             // Crea una instancia del contrato
             miContrato = new web3MetaMask.eth.Contract(Codabi.abi, contractAddress);
+            console.log('Contract instance created:', miContrato);
+            console.log('Contract ABI:', miContrato.options.jsonInterface);
         } else {
             window.location.href = 'errorMetamask.html';
         }
     } catch (error) {
-        alert('Error : ' + error.message);
+        console.error('Error connecting to MetaMask:', error.message);
+        alert('Error connecting to MetaMask: ' + error.message);
     }
 }
 
@@ -37,6 +41,7 @@ async function mostrarDatosPacienteAdmin() {
         let dniPaciente = document.getElementById('dniPaciente').value;
         // Obtener datos del paciente
         let paciente = await miContrato.methods.obtenerDatosPaciente(dniPaciente).call({ from: accounts[0] });
+        console.log(paciente);
         let datosPacienteContainer = document.getElementById('datosPacienteContainer');
         datosPacienteContainer.innerHTML = '';
         if (!paciente.datos.DNI) {
@@ -45,11 +50,10 @@ async function mostrarDatosPacienteAdmin() {
             datosPacienteContainer.innerHTML += `<p class="text-left"><strong>DNI:</strong> ${dniPaciente}</p>`;
             datosPacienteContainer.innerHTML += `<p class="text-left"><strong>Centro Sanitario:</strong> ${paciente.centro_sanitario}</p>`;
             datosPacienteContainer.innerHTML += `<p class="text-left"><strong>Indice Médico Asignado:</strong> ${paciente.medico_asignado}</p>`;
-            // Separar los datos del paciente utilizando el separador ':'
+            // Separa los datos del paciente utilizando el separador ':'
             let datosSeparados = paciente.datos_paciente.split(':');
-            // Crear un array con los nombres de los campos
+            // Crea un array con los nombres de los campos
             let campos = ['Nombre Completo', 'Dirección', 'Nacionalidad', 'Fecha de Nacimiento', 'Alergias', 'Grupo Sanguíneo', 'Peso (kg)', 'Altura (cm)', 'Vacunas'];
-            // Mostrar los datos en el contenedor
             for (let i = 0; i < campos.length; i++) {
                 datosPacienteContainer.innerHTML += `<p class="text-left"><strong>${campos[i]}:</strong> ${datosSeparados[i]}</p>`;
             }
@@ -68,7 +72,7 @@ async function mostrarDatosPaciente() {
         let dniPaciente = document.getElementById('dniPaciente').value;
 
         // Obtener datos del paciente
-        let paciente = await miContrato.methods.obtenerDatosPaciente(dniPaciente).call({ from: accounts[0] });
+        let paciente = await miContrato.methods.obtenerDatosPaciente(dniPaciente).call({ from: accounts[0]});
         let datosPacienteContainer = document.getElementById('datosPacienteContainer');
         datosPacienteContainer.innerHTML = '';
         if (!paciente.datos.DNI) {
@@ -77,11 +81,10 @@ async function mostrarDatosPaciente() {
             if (paciente.datos.direccionPublica.toLowerCase() == accounts[0]) {
                 datosPacienteContainer.innerHTML += `<p class="text-left"><strong>DNI:</strong> ${dniPaciente}</p>`;
                 datosPacienteContainer.innerHTML += `<p class="text-left"><strong>Centro Sanitario:</strong> ${paciente.centro_sanitario}</p>`;
-                // Separar los datos del paciente utilizando el separador ':'
+                // Separa los datos del paciente utilizando el separador ':'
                 let datosSeparados = paciente.datos_paciente.split(':');
-                // Crear un array con los nombres de los campos
+                // Crea un array con los nombres de los campos
                 let campos = ['Nombre Completo', 'Dirección', 'Nacionalidad', 'Fecha de Nacimiento', 'Alergias', 'Grupo Sanguíneo', 'Peso (kg)', 'Altura (cm)', 'Vacunas'];
-                // Mostrar los datos en el contenedor
                 for (let i = 0; i < campos.length; i++) {
                     datosPacienteContainer.innerHTML += `<p class="text-left"><strong>${campos[i]}:</strong> ${datosSeparados[i]}</p>`;
                 }
