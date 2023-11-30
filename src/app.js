@@ -71,7 +71,6 @@ async function mostrarDatosPaciente() {
     try {
         let dniPaciente = document.getElementById('dniPaciente').value;
 
-        // Obtener datos del paciente
         let paciente = await miContrato.methods.obtenerDatosPaciente(dniPaciente).call({ from: accounts[0]});
         let datosPacienteContainer = document.getElementById('datosPacienteContainer');
         datosPacienteContainer.innerHTML = '';
@@ -109,7 +108,7 @@ async function registrarEnfermero() {
         let especialidadEnfermero = document.getElementById('especialidadEnfermero').value;
         let centroSanitarioEnfermero = document.getElementById('centroSanitarioEnfermero').value;
 
-        await miContrato.methods.registrarEnfermero(direccionEnfermero, dniEnfermero, especialidadEnfermero, centroSanitarioEnfermero).send({ from: accounts[0] });
+        await miContrato.methods.registrarEnfermero(direccionEnfermero, dniEnfermero, especialidadEnfermero, centroSanitarioEnfermero).send({ from: accounts[0] , privateFor:"VCkAF9rkYCPVs3mZViy3SXsqxT5UWtyAdz1s54YejQw="});
         alert('Enfermero con DNI ' + dniEnfermero + ' registrado exitosamente.');
         window.location.href = 'index.html';
 
@@ -130,7 +129,7 @@ async function registrarMedico() {
         let especialidadMedico = document.getElementById('especialidadMedico').value;
         let centroSanitarioMedico = document.getElementById('centroSanitarioMedico').value;
 
-        await miContrato.methods.registrarMedico(direccionMedico, dniMedico, especialidadMedico, centroSanitarioMedico).send({ from: accounts[0] });
+        await miContrato.methods.registrarMedico(direccionMedico, dniMedico, especialidadMedico, centroSanitarioMedico).send({ from: accounts[0] , privateFor:"VCkAF9rkYCPVs3mZViy3SXsqxT5UWtyAdz1s54YejQw="});
 
         alert('Médico con DNI ' + dniMedico + ' registrado exitosamente.');
         window.location.href = 'index.html';
@@ -161,7 +160,7 @@ async function registrarPaciente() {
             document.getElementById('altura').value,
             document.getElementById('vacunas').value
         ].join(':');
-        await miContrato.methods.registrarPaciente(dniPaciente, centroSanitarioPaciente, datosPaciente, direccionPublicaPaciente).send({ from: accounts[0] });
+        await miContrato.methods.registrarPaciente(dniPaciente, centroSanitarioPaciente, datosPaciente, direccionPublicaPaciente).send({ from: accounts[0] , privateFor:"VCkAF9rkYCPVs3mZViy3SXsqxT5UWtyAdz1s54YejQw="});
         alert('Paciente con DNI ' + dniPaciente + ' registrado exitosamente.');
         window.location.href = 'index.html';
     } catch (error) {
@@ -181,21 +180,20 @@ async function solicitarCita() {
         let tipoConsulta = document.getElementById('tipoConsulta').value;
         let dniPaciente = document.getElementById('dniPaciente').value;
 
-        // Validar que la fecha de la cita no sea anterior a hoy
+        // Valida que la fecha de la cita no sea anterior a hoy
         let today = new Date().toISOString().split('T')[0];
         if (fechaCita < today) {
             alert('La fecha de la cita no puede ser anterior a hoy.');
             return;
         }
 
-        // Continuar con la solicitud de la cita
         let result = await miContrato.methods.solicitarCita(
             dniPaciente,
             Date.parse(fechaCita + ' ' + horaCita) / 1000, // Convierte la fecha y hora a un timestamp Unix
             parseInt(horaCita), // Convierte la hora a un entero
             datosConsulta,
             tipoConsulta
-        ).send({ from: accounts[0] });
+        ).send({ from: accounts[0] , privateFor:"VCkAF9rkYCPVs3mZViy3SXsqxT5UWtyAdz1s54YejQw="});
         console.log(result);
         alert('Cita solicitada exitosamente.');
         window.location.href = 'index.html';
@@ -218,7 +216,6 @@ async function modificarCita() {
         let datosCita = document.getElementById('motivoCita').value;
         let nuevoTipoConsulta = document.getElementById('nuevoTipoConsulta').value;
 
-        // Validaciones y permisos
         if (indiceCita < 0 || indiceCita >= citas.length) {
             alert('Índice de cita no válido.');
             return;
@@ -238,7 +235,7 @@ async function modificarCita() {
             return;
         }
         await miContrato.methods.modificarCita(indiceCita, datosCita, cita.paciente, nuevaFecha, nuevaHora, nuevoTipoConsulta)
-        .send({ from: accounts[0] });
+        .send({ from: accounts[0] , privateFor:"VCkAF9rkYCPVs3mZViy3SXsqxT5UWtyAdz1s54YejQw="});
         alert('Cita modificada exitosamente.');
         window.location.href = 'index.html';
     } catch (error) {
@@ -272,7 +269,7 @@ async function atenderConsulta() {
             consulta.fecha,
             consulta.hora,
             datosConsultaAtender
-        ).send({ from: accounts[0] });
+        ).send({ from: accounts[0] , privateFor:"VCkAF9rkYCPVs3mZViy3SXsqxT5UWtyAdz1s54YejQw="});
         alert('Consulta atendida exitosamente.');
         window.location.href = 'index.html';
     } catch (error) {
@@ -285,7 +282,7 @@ async function atenderConsulta() {
 }
 
 function timestampAFecha(timestamp) {
-    let fecha = new Date(timestamp * 1000); // Multiplicar por 1000 si el timestamp está en segundos
+    let fecha = new Date(timestamp * 1000);
     return fecha.toLocaleDateString() + ' ' + fecha.toLocaleTimeString();
 }
 
@@ -309,7 +306,6 @@ async function mostrarCitas() {
                 botonModificar.textContent = 'Modificar Cita';
                 botonModificar.classList.add('boton-modificar-cita');
                 botonModificar.addEventListener('click', function () {
-                    // Redirige a modificarCita.html con el índice de la cita
                     window.location.href = `modificarCita.html?indice=${index}`;
                 });
 

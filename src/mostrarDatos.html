@@ -26,38 +26,41 @@
                 </span>
                 <span id="current-time">
                     <img id="clock-icon" src="../src/images/reloj.png" alt="Reloj" height="20px">
-                    <span id="clock-time"></span> <!-- Agregado un contenedor para la hora -->
+                    <span id="clock-time"></span> 
                 </span>
             </h1>
         </div>
 
         <div class="menu-container">
-    <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')" onmouseout="ocultarSubMenu('medico')">
-        <i class="fas fa-user-md"></i> Personal Sanitario
-        <ul class="submenu" id="medico-submenu">
-            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
-            <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
-        </ul>
-    </div>
+            <div class="menu-item" id="medico-menu" onmouseover="mostrarSubMenu('medico')"
+                onmouseout="ocultarSubMenu('medico')">
+                <i class="fas fa-user-md"></i> Personal Sanitario
+                <ul class="submenu" id="medico-submenu">
+                    <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Crear Cita</li>
+                    <li class="submenu-item" onclick="redirigirPagina('atenderConsulta')">Atender Consulta</li>
+                </ul>
+            </div>
 
-    <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')" onmouseout="ocultarSubMenu('paciente')">
-        <i class="fas fa-user"></i> Paciente
-        <ul class="submenu" id="paciente-submenu">
-            <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</li>
-            <li class="submenu-item" onclick="redirigirPagina('datosPaciente')">Mis datos</li>
-        </ul>
-    </div>
+            <div class="menu-item" id="paciente-menu" onmouseover="mostrarSubMenu('paciente')"
+                onmouseout="ocultarSubMenu('paciente')">
+                <i class="fas fa-user"></i> Paciente
+                <ul class="submenu" id="paciente-submenu">
+                    <li class="submenu-item" onclick="redirigirPagina('pedirCita')">Pedir Cita</li>
+                    <li class="submenu-item" onclick="redirigirPagina('datosPaciente')">Mis datos</li>
+                </ul>
+            </div>
 
-    <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')" onmouseout="ocultarSubMenu('admin')">
-        <i class="fas fa-cogs"></i> Administrador
-        <ul class="submenu" id="admin-submenu">
-            <li class="submenu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</li>
-            <li class="submenu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</li>
-            <li class="submenu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</li>
-            <li class="submenu-item" onclick="redirigirPagina('mostrarDatos')">Mostrar Datos</li>
-        </ul>
-    </div>
-</div>
+            <div class="menu-item" id="admin-menu" onmouseover="mostrarSubMenu('admin')"
+                onmouseout="ocultarSubMenu('admin')">
+                <i class="fas fa-cogs"></i> Administrador
+                <ul class="submenu" id="admin-submenu">
+                    <li class="submenu-item" onclick="redirigirPagina('registrarPaciente')">Registrar Paciente</li>
+                    <li class="submenu-item" onclick="redirigirPagina('registrarMedico')">Registrar Médico</li>
+                    <li class="submenu-item" onclick="redirigirPagina('registrarEnfermero')">Registrar Enfermero</li>
+                    <li class="submenu-item" onclick="redirigirPagina('mostrarDatos')">Mostrar Datos</li>
+                </ul>
+            </div>
+        </div>
         <div class="form-container">
             <div class="card-body">
                 <form id="obtenerDatosPacienteForm">

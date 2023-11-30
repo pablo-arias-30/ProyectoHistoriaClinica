@@ -52,7 +52,7 @@ contract('HistoriaClinica', (accounts) => {
 
   it('Solicitar una cita', async () => {
     const DNI_Paciente = '123456789';
-    const fecha = Math.floor(Date.now() / 1000) + 3600; // Obtener el timestamp actual en segundos
+    const fecha = Math.floor(Date.now() / 1000) + 3600; // Obtiene el timestamp actual en segundos
     const hora = 10;
     const tipoConsulta = 0; // Tipo de consulta de urgencia
     const centroSanitario = 'Clínica Privada';
@@ -106,10 +106,8 @@ contract('HistoriaClinica', (accounts) => {
 
     const citaAntes = await historiaClinica.citas(0);
 
-    // Modificar la cita
     await historiaClinica.modificarCita(0, 'Nuevo motivo de consulta', citaAntes.paciente, nuevaFecha, nuevaHora, nuevoTipoConsulta, { from: pacienteAddress });
 
-    // Obtener la cita modificada
     const citaDespues = await historiaClinica.citas(0);
     assert.equal(citaDespues.fecha, nuevaFecha, 'La nueva fecha de la cita es incorrecta');
     assert.equal(citaDespues.hora, nuevaHora, 'La nueva hora de la cita es incorrecta');
